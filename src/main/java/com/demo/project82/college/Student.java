@@ -26,7 +26,7 @@ public class Student extends BaseEntity {
     @Column
     private Integer age;
 
-    @OneToMany
     @Builder.Default
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Course> courses = new ArrayList<>();
 }
