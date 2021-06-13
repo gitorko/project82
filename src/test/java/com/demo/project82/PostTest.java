@@ -18,6 +18,8 @@ public class PostTest {
 
     @Test
     public void test() {
+        postRepository.deleteAllInBatch();
+        tagRepository.deleteAllInBatch();
         Post post = new Post("Hibernate Many to Many Example with Spring Boot",
             "Learn how to map a many to many relationship using hibernate",
             "Entire Post content with Sample code");

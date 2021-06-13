@@ -135,7 +135,7 @@ public class UniversityTest {
 
         System.out.println("\nFind Departments with the first name of the chair is 'John'");
         departmentRepository.findAll(Example.of(
-                new Department(null, new Staff(new Person("John", null))))).forEach(System.out::println);
+                new Department(null, new Staff(new Person("John", null), null)))).forEach(System.out::println);
 
         System.out.println("\nFind All Departments with the name ending in 'sciences', case insensitive");
         departmentRepository.findAll(Example.of(new Department("sciences", null),
@@ -156,12 +156,12 @@ public class UniversityTest {
     public void runtimeErrors() {
         Course course = courseRepository.findByDepartmentName("Sciences");
         //Various ways to leverage the Optional
-        CourseView view = courseRepository.getCourseViewByName("English 101").get();
-        view = courseRepository.getCourseViewByName("English 101").orElseThrow();
-        view = courseRepository.getCourseViewByName("English 100").orElse(
-                new CourseView("dummyCourse",
-                        "Bad Instructor",
-                        "No Department"));
+//        CourseView view = courseRepository.getCourseViewByName("English 101").get();
+//        view = courseRepository.getCourseViewByName("English 101").orElseThrow();
+//        view = courseRepository.getCourseViewByName("English 100").orElse(
+//                new CourseView("dummyCourse",
+//                        "Bad Instructor",
+//                        "No Department"));
     }
 
     @AfterTestClass
@@ -173,17 +173,17 @@ public class UniversityTest {
         studentRepository.save(new Student(new Person("ally", "kim"), !fullTime, 19));
 
         //Staff
-        Staff deanJones = staffRepository.save(new Staff(new Person("John","Jones")));
-        Staff deanMartin = staffRepository.save(new Staff(new Person("Matthew","Martin")));
-        Staff profBrown =   staffRepository.save(new Staff(new Person ("James", "Brown")));
-        Staff profMiller =   staffRepository.save(new Staff(new Person ("Judy", "Miller")));
-        Staff profDavis =   staffRepository.save(new Staff(new Person ("James", "Davis")));
-        Staff profMoore =   staffRepository.save(new Staff(new Person ("Allison", "Moore")));
-        Staff profThomas =   staffRepository.save(new Staff(new Person ("Tom", "Thomas")));
-        Staff profGreen =   staffRepository.save(new Staff(new Person ("Graham", "Green")));
-        Staff profWhite=   staffRepository.save(new Staff(new Person ("Whitney", "White")));
-        Staff profBlack =   staffRepository.save(new Staff(new Person ("Jack", "Black")));
-        Staff profKing =   staffRepository.save(new Staff(new Person ("Queen", "King")));
+        Staff deanJones = staffRepository.save(new Staff(new Person("John","Jones"), null));
+        Staff deanMartin = staffRepository.save(new Staff(new Person("Matthew","Martin"), null));
+        Staff profBrown =   staffRepository.save(new Staff(new Person ("James", "Brown"), null));
+        Staff profMiller =   staffRepository.save(new Staff(new Person ("Judy", "Miller"), null));
+        Staff profDavis =   staffRepository.save(new Staff(new Person ("James", "Davis"), null));
+        Staff profMoore =   staffRepository.save(new Staff(new Person ("Allison", "Moore"), null));
+        Staff profThomas =   staffRepository.save(new Staff(new Person ("Tom", "Thomas"), null));
+        Staff profGreen =   staffRepository.save(new Staff(new Person ("Graham", "Green"), null));
+        Staff profWhite=   staffRepository.save(new Staff(new Person ("Whitney", "White"), null));
+        Staff profBlack =   staffRepository.save(new Staff(new Person ("Jack", "Black"), null));
+        Staff profKing =   staffRepository.save(new Staff(new Person ("Queen", "King"), null));
 
         //Departments
         Department humanities = departmentRepository.save(new Department("Humanities", deanJones));

@@ -14,10 +14,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NaturalId;
 
 @Entity
 @Table(name = "tags")
+@NoArgsConstructor
 @Data
 public class Tag {
     @Id
@@ -36,10 +38,6 @@ public class Tag {
             },
             mappedBy = "tags")
     private Set<Post> posts = new HashSet<>();
-
-    public Tag() {
-
-    }
 
     public Tag(String name) {
         this.name = name;
