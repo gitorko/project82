@@ -8,21 +8,24 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 @Entity
 @Data
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 @Table(name = "Department")
-public class Department {
-    @Id
-    @GeneratedValue
-    private Integer id;
+public class Department extends BaseEntity{
 
     @Column
     private String name;
 
+    @OneToOne
+    private Staff chair;
+
+    @Builder.Default
     @OneToMany(mappedBy = "department", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Course> courses = new ArrayList<>();
 
@@ -30,4 +33,8 @@ public class Department {
         courses.add(course);
     }
 
+    public Department(String name, Staff chair) {
+        this.name = name;
+        this.chair = chair;
+    }
 }

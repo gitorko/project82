@@ -2,6 +2,6 @@ package com.demo.project82.college;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface DepartmentRepo extends JpaRepository<Department, Integer> {
+public interface DepartmentRepository extends JpaRepository<Department, Long> {
 
 }

@@ -29,4 +29,10 @@ public class Student extends BaseEntity {
     @Builder.Default
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Course> courses = new ArrayList<>();
+
+    public Student(Person attendee, boolean fullTime, Integer age) {
+        this.attendee = attendee;
+        this.fullTime = fullTime;
+        this.age = age;
+    }
 }
