@@ -23,6 +23,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * https://www.netsurfingzone.com/jpa/elementcollection-example-in-hibernate-jpa-using-spring-boot/
+ * https://stackoverflow.com/questions/8969059/difference-between-onetomany-and-elementcollection/8969169
+ */
+
 @Entity
 @Table(name = "customer")
 @Data
@@ -54,5 +59,8 @@ public class Customer extends AuditModel implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(length = 10)
     private Gender gender;
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
 }
