@@ -1,13 +1,9 @@
 package com.demo.project82;
 
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Collections;
+import javax.transaction.Transactional;
 
-import com.demo.project82.college.Department;
 import com.demo.project82.college.DepartmentRepository;
-import com.demo.project82.college.Person;
-import com.demo.project82.college.Student;
 import com.demo.project82.college.StudentRepository;
 import com.demo.project82.customer.Customer;
 import com.demo.project82.customer.CustomerRepository;
