@@ -1,10 +1,7 @@
 package com.demo.project82;
 
-import java.util.Arrays;
-
 import com.demo.project82.college.Course;
 import com.demo.project82.college.CourseRepository;
-import com.demo.project82.college.CourseView;
 import com.demo.project82.college.Department;
 import com.demo.project82.college.DepartmentRepository;
 import com.demo.project82.college.Person;
@@ -52,9 +49,9 @@ public class UniversityTest {
     @Test
     public void intermediateQueryExamples() {
         System.out.println("Find students by name and traverse entities \n" +
-                studentRepository.findByAttendeeFirstNameAndAttendeeLastName("jane","doe"));
+                studentRepository.findByAttendeeFirstNameAndAttendeeLastName("jane", "doe"));
         System.out.println("Find students by name with Person Object \n" +
-                studentRepository.findByAttendee(new Person("jane","doe")));
+                studentRepository.findByAttendee(new Person("jane", "doe")));
 
         System.out.println("\nFind Students older than 19");
         studentRepository.findByAgeGreaterThan(19).forEach(System.out::println);
@@ -173,17 +170,17 @@ public class UniversityTest {
         studentRepository.save(new Student(new Person("ally", "kim"), !fullTime, 19));
 
         //Staff
-        Staff deanJones = staffRepository.save(new Staff(new Person("John","Jones"), null));
-        Staff deanMartin = staffRepository.save(new Staff(new Person("Matthew","Martin"), null));
-        Staff profBrown =   staffRepository.save(new Staff(new Person ("James", "Brown"), null));
-        Staff profMiller =   staffRepository.save(new Staff(new Person ("Judy", "Miller"), null));
-        Staff profDavis =   staffRepository.save(new Staff(new Person ("James", "Davis"), null));
-        Staff profMoore =   staffRepository.save(new Staff(new Person ("Allison", "Moore"), null));
-        Staff profThomas =   staffRepository.save(new Staff(new Person ("Tom", "Thomas"), null));
-        Staff profGreen =   staffRepository.save(new Staff(new Person ("Graham", "Green"), null));
-        Staff profWhite=   staffRepository.save(new Staff(new Person ("Whitney", "White"), null));
-        Staff profBlack =   staffRepository.save(new Staff(new Person ("Jack", "Black"), null));
-        Staff profKing =   staffRepository.save(new Staff(new Person ("Queen", "King"), null));
+        Staff deanJones = staffRepository.save(new Staff(new Person("John", "Jones"), null));
+        Staff deanMartin = staffRepository.save(new Staff(new Person("Matthew", "Martin"), null));
+        Staff profBrown = staffRepository.save(new Staff(new Person("James", "Brown"), null));
+        Staff profMiller = staffRepository.save(new Staff(new Person("Judy", "Miller"), null));
+        Staff profDavis = staffRepository.save(new Staff(new Person("James", "Davis"), null));
+        Staff profMoore = staffRepository.save(new Staff(new Person("Allison", "Moore"), null));
+        Staff profThomas = staffRepository.save(new Staff(new Person("Tom", "Thomas"), null));
+        Staff profGreen = staffRepository.save(new Staff(new Person("Graham", "Green"), null));
+        Staff profWhite = staffRepository.save(new Staff(new Person("Whitney", "White"), null));
+        Staff profBlack = staffRepository.save(new Staff(new Person("Jack", "Black"), null));
+        Staff profKing = staffRepository.save(new Staff(new Person("Queen", "King"), null));
 
         //Departments
         Department humanities = departmentRepository.save(new Department("Humanities", deanJones));
@@ -198,19 +195,19 @@ public class UniversityTest {
         courseRepository.save(english201.addPrerequisite(english101));
 
         //Natural Science Courses
-        Course chemistry = courseRepository.save(new Course("Chemistry",3, profDavis, naturalSciences));
-        Course physics = courseRepository.save(new Course("Physics",3, profDavis, naturalSciences));
+        Course chemistry = courseRepository.save(new Course("Chemistry", 3, profDavis, naturalSciences));
+        Course physics = courseRepository.save(new Course("Physics", 3, profDavis, naturalSciences));
         courseRepository.save(physics.addPrerequisite(chemistry));
-        Course cProgramming = courseRepository.save(new Course("C Programming",3, profMoore, naturalSciences));
-        Course jProgramming = courseRepository.save(new Course("Java Programming",3, profMoore, naturalSciences));
+        Course cProgramming = courseRepository.save(new Course("C Programming", 3, profMoore, naturalSciences));
+        Course jProgramming = courseRepository.save(new Course("Java Programming", 3, profMoore, naturalSciences));
 
         //Social Science Courses
-        Course history101 = courseRepository.save(new Course("History 101",3, profMiller, socialSciences));
-        Course anthro = courseRepository.save(new Course("Anthropology ",3, profKing, socialSciences));
+        Course history101 = courseRepository.save(new Course("History 101", 3, profMiller, socialSciences));
+        Course anthro = courseRepository.save(new Course("Anthropology ", 3, profKing, socialSciences));
         courseRepository.save(anthro.addPrerequisite(history101));
-        Course sociology = courseRepository.save(new Course("Sociology",3, profKing, socialSciences));
+        Course sociology = courseRepository.save(new Course("Sociology", 3, profKing, socialSciences));
         courseRepository.save(sociology.addPrerequisite(history101));
-        Course psych = courseRepository.save(new Course("Psychology",3, profWhite, socialSciences));
+        Course psych = courseRepository.save(new Course("Psychology", 3, profWhite, socialSciences));
         courseRepository.save(psych.addPrerequisite(history101).addPrerequisite(english101));
     }
 }

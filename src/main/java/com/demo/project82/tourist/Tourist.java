@@ -1,14 +1,12 @@
 package com.demo.project82.tourist;
 
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.hibernate.annotations.NaturalId;
 
@@ -28,7 +26,6 @@ public class Tourist {
 
     @NaturalId
     @NotNull
-    @Email
     @Size(max = 60)
     private String email;
 

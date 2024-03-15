@@ -2,13 +2,20 @@ package com.demo.project82.college;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.*;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @Entity
 @Table(name = "COURSE")
@@ -16,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Course extends BaseEntity{
+public class Course extends BaseEntity {
 
     @Column
     private String name;
@@ -29,13 +36,14 @@ public class Course extends BaseEntity{
 
     @ManyToMany(fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
+    @Builder.Default
     private List<Course> prerequisites = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn
     private Department department;
 
-    public Course addPrerequisite(Course prerequisite){
+    public Course addPrerequisite(Course prerequisite) {
         prerequisites.add(prerequisite);
         return this;
     }

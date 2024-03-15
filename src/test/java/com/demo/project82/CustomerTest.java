@@ -1,7 +1,6 @@
 package com.demo.project82;
 
 import java.time.LocalDate;
-import javax.transaction.Transactional;
 
 import com.demo.project82.college.DepartmentRepository;
 import com.demo.project82.college.StudentRepository;

@@ -1,9 +1,5 @@
 package com.demo.project82;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
-
 import com.demo.project82.blog.Blog;
 import com.demo.project82.blog.BlogComment;
 import com.demo.project82.blog.BlogRepository;
