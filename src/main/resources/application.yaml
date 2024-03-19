@@ -9,8 +9,21 @@ spring:
     username: test
     password: test@123
   jpa:
-    show-sql: false
     hibernate.ddl-auto: create
     properties.hibernate.temp.use_jdbc_metadata_defaults: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     defer-datasource-initialization: true
+    show-sql: false
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: false
+logging:
+  level:
+    root: info
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.hibernate.orm.jdbc.bind: TRACE
+    org.springframework.orm.jpa: DEBUG
+    org.hibernate.event.internal: TRACE
+    org.hibernate.internal.SessionImpl: TRACE

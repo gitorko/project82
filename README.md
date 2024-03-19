@@ -1,6 +1,6 @@
 # Project82
 
-Spring Data JPA
+Spring Data JPA Relations
 
 ### Version
 
@@ -24,3 +24,9 @@ grant all PRIVILEGES ON DATABASE "test-db" to test;
 docker stop pg-container
 docker start pg-container
 ```
+
+@EmbeddedId
+@Column(name = "created_at", nullable = true, updatable = false)
+@NaturalId
+@MapKey
+@CollectionTable(name = "user_addresses", joinColumns = @JoinColumn(name = "user_id"))
