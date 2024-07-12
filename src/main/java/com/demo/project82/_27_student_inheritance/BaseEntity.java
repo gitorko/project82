@@ -1,4 +1,4 @@
-package com.demo.project82._93_college;
+package com.demo.project82._27_student_inheritance;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

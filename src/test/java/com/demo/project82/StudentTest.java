@@ -83,6 +83,11 @@ import com.demo.project82._26_student_embeddable.Student26;
 import com.demo.project82._26_student_embeddable.Teacher26;
 import com.demo.project82._26_student_embeddable.repo.Student26Repository;
 import com.demo.project82._26_student_embeddable.repo.Teacher26Repository;
+import com.demo.project82._27_student_inheritance.Student27;
+import com.demo.project82._27_student_inheritance.repo.Student27Repository;
+import com.demo.project82._28_student_projections.Student28;
+import com.demo.project82._28_student_projections.Student28View;
+import com.demo.project82._28_student_projections.repo.Student28Repository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -170,6 +175,12 @@ public class StudentTest extends BaseTest {
     Student26Repository student26Repository;
 
     @Autowired
+    Student27Repository student27Repository;
+
+    @Autowired
+    Student28Repository student28Repository;
+
+    @Autowired
     Teacher26Repository teacher26Repository;
 
     @Autowired
@@ -189,62 +200,62 @@ public class StudentTest extends BaseTest {
 
     @Test
     public void test_00_student_constraints() {
-        Student00 student00 = Student00.builder()
+        Student00 student = Student00.builder()
                 .studentName("Jack")
                 .dob(new Date())
                 .age(40)
                 .build();
-        Student00 savedStudent00 = student00Repository.save(student00);
+        Student00 savedStudent00 = student00Repository.save(student);
         assertNotNull(savedStudent00.getId());
     }
 
     @Test
     public void test_01_student_one2one_unidirectional() {
-        Student01 student01 = Student01.builder().studentName("Jack").build();
-        Contact01 contact01 = Contact01.builder().address("bangalore").student(student01).build();
-        Contact01 savedContact01 = contact01Repository.save(contact01);
+        Student01 student = Student01.builder().studentName("Jack").build();
+        Contact01 contact = Contact01.builder().address("bangalore").student(student).build();
+        Contact01 savedContact = contact01Repository.save(contact);
         //No cascade so student is not saved.
-        Assertions.assertNull(savedContact01.getStudent().getId());
-        assertNotNull(savedContact01.getId());
+        Assertions.assertNull(savedContact.getStudent().getId());
+        assertNotNull(savedContact.getId());
     }
 
     @Test
     public void test_02_student_one2one_mapsid() {
-        Student02 student02 = Student02.builder().studentName("Jack").build();
-        Contact02 contact02 = Contact02.builder().address("bangalore").student(student02).build();
-        Contact02 savedContact02 = contact02Repository.save(contact02);
+        Student02 student = Student02.builder().studentName("Jack").build();
+        Contact02 contact = Contact02.builder().address("bangalore").student(student).build();
+        Contact02 savedContact = contact02Repository.save(contact);
         //No cascade so student but still saved.
-        assertNotNull(savedContact02.getStudent().getId());
-        assertNotNull(savedContact02.getId());
+        assertNotNull(savedContact.getStudent().getId());
+        assertNotNull(savedContact.getId());
     }
 
     @Test
     public void test_03_student_one2one_joincolumn() {
-        Student03 student03 = Student03.builder().studentName("Jack").build();
-        Contact03 contact03 = Contact03.builder().address("bangalore").student(student03).build();
-        Contact03 savedContact03 = contact03Repository.save(contact03);
+        Student03 student = Student03.builder().studentName("Jack").build();
+        Contact03 contact = Contact03.builder().address("bangalore").student(student).build();
+        Contact03 savedContact = contact03Repository.save(contact);
         //cascade so student is saved.
-        assertNotNull(savedContact03.getStudent().getId());
-        assertNotNull(savedContact03.getId());
+        assertNotNull(savedContact.getStudent().getId());
+        assertNotNull(savedContact.getId());
     }
 
     @Test
     public void test_04_student_one2one_bidirectional() {
-        Contact04 contact04 = Contact04.builder().address("bangalore").build();
-        Student04 student04 = Student04.builder().studentName("Jack").contact(contact04).build();
-        Student04 savedStudent04 = student04Repository.save(student04);
-        assertNotNull(savedStudent04.getContact().getId());
-        assertNotNull(savedStudent04.getId());
-        Optional<Student04> student04Optional = student04Repository.findById(student04.getId());
-        assertNotNull(student04Optional.get().getContact().getId());
+        Contact04 contact = Contact04.builder().address("bangalore").build();
+        Student04 student = Student04.builder().studentName("Jack").contact(contact).build();
+        Student04 savedStudent = student04Repository.save(student);
+        assertNotNull(savedStudent.getContact().getId());
+        assertNotNull(savedStudent.getId());
+        Optional<Student04> studentOptional = student04Repository.findById(student.getId());
+        assertNotNull(studentOptional.get().getContact().getId());
     }
 
     @Test
     public void test_04_student_one2one_bidirectional_nplus1() {
         //creates the N+1 problem
-        Iterable<Student04> student04List = student04Repository.findAll();
+        Iterable<Student04> studentList = student04Repository.findAll();
         //Even though student contact is not required it is loaded as the relation is @OneToOne
-        student04List.forEach(e -> {
+        studentList.forEach(e -> {
             assertNotNull(e.getId());
         });
     }
@@ -252,16 +263,16 @@ public class StudentTest extends BaseTest {
     @Test
     public void test_05_student_one2one_bidirectional_nplus1_fixed() {
         //No N+1 problem
-        Iterable<Student05> student05List = student05Repository.findAll();
-        student05List.forEach(e -> {
+        Iterable<Student05> studentList = student05Repository.findAll();
+        studentList.forEach(e -> {
             assertNotNull(e.getId());
         });
     }
 
     @Test
     public void test_06_student_one2many() {
-        Iterable<Student06> student06List = student06Repository.findAll();
-        student06List.forEach(e -> {
+        Iterable<Student06> studentList = student06Repository.findAll();
+        studentList.forEach(e -> {
             assertNotNull(e.getId());
             assertEquals(3, e.getCourses().size());
         });
@@ -269,8 +280,8 @@ public class StudentTest extends BaseTest {
 
     @Test
     public void test_07_student_one2many_joincolumn() {
-        Iterable<Student07> student07List = student07Repository.findAll();
-        student07List.forEach(e -> {
+        Iterable<Student07> studentList = student07Repository.findAll();
+        studentList.forEach(e -> {
             assertNotNull(e.getId());
             assertEquals(3, e.getCourses().size());
         });
@@ -278,22 +289,22 @@ public class StudentTest extends BaseTest {
 
     @Test
     public void test_07_student_one2many_joincolumn_save() {
-        Course07 course07 = Course07.builder()
+        Course07 course = Course07.builder()
                 .courseName("chemistry")
                 .build();
-        Student07 student07 = Student07.builder()
+        Student07 student = Student07.builder()
                 .studentName("Jack")
-                .courses(List.of(course07))
+                .courses(List.of(course))
                 .build();
-        Student07 savedStudent07 = student07Repository.save(student07);
-        assertNotNull(savedStudent07.getId());
-        assertEquals(1, savedStudent07.getCourses().size());
+        Student07 savedStudent = student07Repository.save(student);
+        assertNotNull(savedStudent.getId());
+        assertEquals(1, savedStudent.getCourses().size());
     }
 
     @Test
     public void test_08_student_one2many_joincolumn_nplus1() {
-        Iterable<Student08> student08List = student08Repository.findAll();
-        student08List.forEach(e -> {
+        Iterable<Student08> studentList = student08Repository.findAll();
+        studentList.forEach(e -> {
             assertNotNull(e.getId());
             assertEquals(3, e.getCourses().size());
         });
@@ -301,8 +312,8 @@ public class StudentTest extends BaseTest {
 
     @Test
     public void test_09_student_one2many_mappedby_nplus1() {
-        Iterable<Student09> student09List = student09Repository.findAll();
-        student09List.forEach(e -> {
+        Iterable<Student09> studentList = student09Repository.findAll();
+        studentList.forEach(e -> {
             assertNotNull(e.getId());
             assertEquals(3, e.getCourses().size());
         });
@@ -336,14 +347,14 @@ public class StudentTest extends BaseTest {
         Course10 physicsCourse = Course10.builder()
                 .courseName("physics")
                 .build();
-        Student10 student10 = Student10.builder()
+        Student10 student = Student10.builder()
                 .studentName("Jack")
                 .build();
-        student10.addCourse(historyCourse);
-        student10.addCourse(physicsCourse);
-        Student10 savedStudent10 = student10Repository.save(student10);
+        student.addCourse(historyCourse);
+        student.addCourse(physicsCourse);
+        Student10 savedStudent = student10Repository.save(student);
 
-        List<Course10> courses = course10Repository.findAllByStudent(savedStudent10);
+        List<Course10> courses = course10Repository.findAllByStudent(savedStudent);
         assertEquals(2, courses.size());
     }
 
@@ -355,25 +366,25 @@ public class StudentTest extends BaseTest {
         Course10 physicsCourse = Course10.builder()
                 .courseName("physics")
                 .build();
-        Student10 student10 = Student10.builder()
+        Student10 student = Student10.builder()
                 .studentName("Jack")
                 .build();
-        student10.addCourse(historyCourse);
-        student10.addCourse(physicsCourse);
+        student.addCourse(historyCourse);
+        student.addCourse(physicsCourse);
         Course10 savedHistoryCourse = course10Repository.save(historyCourse);
         Course10 savedPhysicsCourse = course10Repository.save(physicsCourse);
-        Student10 student = savedHistoryCourse.getStudent();
-        assertNotNull(student.getId());
+        Student10 savedStudent = savedHistoryCourse.getStudent();
+        assertNotNull(savedStudent.getId());
 
-        List<Course10> courses = course10Repository.findAllByStudent(student);
+        List<Course10> courses = course10Repository.findAllByStudent(savedStudent);
         assertEquals(2, courses.size());
     }
 
     @Test
     public void test_11_student_many2one_unidirectional_find() {
         //Get all the students & for each student get all the courses
-        Iterable<Student11> student11List = student11Repository.findAll();
-        student11List.forEach(e -> {
+        Iterable<Student11> studentList = student11Repository.findAll();
+        studentList.forEach(e -> {
             assertNotNull(e.getId());
             System.out.println("Student Name: " + e.getStudentName());
             List<Course11> courses = course11Repository.findAllByStudent(e);
@@ -385,22 +396,22 @@ public class StudentTest extends BaseTest {
 
     @Test
     public void test_11_student_many2one_unidirectional_save() {
-        Student11 student11 = Student11.builder()
+        Student11 student = Student11.builder()
                 .studentName("Jack")
                 .build();
         Course11 historyCourse = Course11.builder()
                 .courseName("history")
-                .student(student11)
+                .student(student)
                 .build();
         Course11 physicsCourse = Course11.builder()
                 .courseName("physics")
-                .student(student11)
+                .student(student)
                 .build();
         Course11 savedHistory = course11Repository.save(historyCourse);
         Course11 savedPhysics = course11Repository.save(physicsCourse);
-        Student11 savedStudent11 = student11Repository.findById(savedHistory.getStudent().getId()).orElseGet(null);
+        Student11 savedStudent = student11Repository.findById(savedHistory.getStudent().getId()).orElseGet(null);
 
-        List<Course11> courses = course11Repository.findAllByStudent(savedStudent11);
+        List<Course11> courses = course11Repository.findAllByStudent(savedStudent);
         assertEquals(2, courses.size());
     }
 
@@ -409,28 +420,20 @@ public class StudentTest extends BaseTest {
         Phone12 phone1 = Phone12.builder()
                 .phone("999-999-9999")
                 .build();
-        Student12 student12 = Student12.builder()
+        Student12 student = Student12.builder()
                 .studentName("Jack")
                 .phones(List.of(phone1))
                 .build();
-        Student12 savedStudent12 = student12Repository.save(student12);
+        Student12 savedStudent12 = student12Repository.save(student);
         assertNotNull(savedStudent12.getId());
     }
 
     @Test
     public void test_12_student_elementcollection_find() {
-        Phone12 phone1 = Phone12.builder()
-                .phone("999-999-9999")
-                .build();
-        Student12 student12 = Student12.builder()
-                .studentName("Jack")
-                .phones(List.of(phone1))
-                .build();
         Iterable<Student12> listOfStudents = student12Repository.findAll();
         listOfStudents.forEach(e -> {
             assertEquals(2, e.getPhones().size());
         });
-
     }
 
     @Test
@@ -544,8 +547,8 @@ public class StudentTest extends BaseTest {
                 .studentName("Jack")
                 .build();
         Map<String, Course17> courseMap = new HashMap<>();
-        courseMap.put("physicsCourse", physicsCourse);
-        courseMap.put("chemistryCourse", chemistryCourse);
+        courseMap.put("physics", physicsCourse);
+        courseMap.put("chemistry", chemistryCourse);
         student.setCourseMap(courseMap);
         Student17 savedStudent = student17Repository.save(student);
         assertNotNull(savedStudent.getId());
@@ -553,58 +556,58 @@ public class StudentTest extends BaseTest {
 
     @Test
     public void test_20_student_enum_lob() {
-        Student20 student20 = Student20.builder()
+        Student20 student = Student20.builder()
                 .studentName("Jack")
                 .studentType(StudentType.FULL_TIME)
                 .build();
-        Student20 savedStudent20 = student20Repository.save(student20);
-        assertNotNull(savedStudent20.getId());
-        assertEquals(StudentType.FULL_TIME, savedStudent20.getStudentType());
+        Student20 savedStudent = student20Repository.save(student);
+        assertNotNull(savedStudent.getId());
+        assertEquals(StudentType.FULL_TIME, savedStudent.getStudentType());
     }
 
     @Test
     public void test_21_student_audit() {
-        Student21 student21 = Student21.builder()
+        Student21 student = Student21.builder()
                 .studentName("Jack")
                 .build();
-        Student21 savedStudent21 = student21Repository.save(student21);
-        assertNotNull(savedStudent21.getId());
-        assertNotNull(savedStudent21.getCreatedAt());
-        assertNotNull(savedStudent21.getUpdatedAt());
+        Student21 savedStudent = student21Repository.save(student);
+        assertNotNull(savedStudent.getId());
+        assertNotNull(savedStudent.getCreatedAt());
+        assertNotNull(savedStudent.getUpdatedAt());
     }
 
     @Test
     public void test_22_student_unique_constraints() {
-        Student22 student22 = Student22.builder()
+        Student22 student = Student22.builder()
                 .studentName("Jack")
                 .userName("user01")
                 .email("email@email.com")
                 .build();
-        Student22 savedStudent22 = student22Repository.save(student22);
-        assertNotNull(savedStudent22.getId());
+        Student22 savedStudent = student22Repository.save(student);
+        assertNotNull(savedStudent.getId());
     }
 
     @Test
     public void test_23_student_nartual_id() {
-        Student23 student23 = Student23.builder()
+        Student23 student = Student23.builder()
                 .studentName("Jack")
                 .email("email@email.com")
                 .build();
-        Student23 savedStudent23 = student23Repository.save(student23);
-        assertNotNull(savedStudent23.getId());
+        Student23 savedStudent = student23Repository.save(student);
+        assertNotNull(savedStudent.getId());
     }
 
     @Test
     public void test_24_student_composite_key() {
-        Student24 student24 = Student24.builder()
+        Student24 student = Student24.builder()
                 .student24Identity(Student24Identity.builder()
                         .registrationId("R-568")
                         .studentId("S-457")
                         .build())
                 .studentName("Jack")
                 .build();
-        Student24 savedStudent24 = student24Repository.save(student24);
-        assertNotNull(savedStudent24);
+        Student24 savedStudent = student24Repository.save(student);
+        assertNotNull(savedStudent);
     }
 
     @Test
@@ -614,14 +617,14 @@ public class StudentTest extends BaseTest {
         attributes.put("zipcode", 12345);
         String payload = "{\"city\": \"bangalore\"}";
 
-        Student25 student25 = Student25.builder()
+        Student25 student = Student25.builder()
                 .attributes(attributes)
                 .payload(payload)
                 .build();
-        Student25 savedStudent25 = student25Repository.save(student25);
+        Student25 savedStudent25 = student25Repository.save(student);
         assertNotNull(savedStudent25);
-        assertNotNull(student25.serializeCustomerAttributes());
-        assertNotNull(student25.deserializeCustomerAttributes());
+        assertNotNull(student.serializeCustomerAttributes());
+        assertNotNull(student.deserializeCustomerAttributes());
     }
 
     @Test
@@ -648,6 +651,26 @@ public class StudentTest extends BaseTest {
         Teacher26 savedTeacher = teacher26Repository.save(teacher);
         assertNotNull(savedStudent.getId());
         assertNotNull(savedTeacher.getId());
+    }
+
+    @Test
+    public void test_27_student_inheritance() {
+        Student27 student = Student27.builder()
+                .studentName("Jack")
+                .build();
+        Student27 savedStudent = student27Repository.save(student);
+        assertNotNull(savedStudent.getId());
+    }
+
+    @Test
+    public void test_28_student_projections() {
+        Student28 student = Student28.builder()
+                .studentName("Jack")
+                .build();
+        Student28 savedStudent = student28Repository.save(student);
+        assertNotNull(savedStudent.getId());
+        Student28View student27View = student28Repository.getStudent27View(savedStudent.getStudentName());
+        assertNotNull("Jack", student27View.getStudentName());
     }
 
 }
