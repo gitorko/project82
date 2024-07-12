@@ -1,5 +1,6 @@
 package com.demo.project82._28_student_projections;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,5 +25,8 @@ public class Student28 {
 
     @NotBlank
     private String studentName;
+
+    @Column(columnDefinition = "text")
+    private String notes;
 
 }

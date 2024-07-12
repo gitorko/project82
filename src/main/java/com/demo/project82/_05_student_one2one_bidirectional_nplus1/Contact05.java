@@ -2,6 +2,7 @@ package com.demo.project82._05_student_one2one_bidirectional_nplus1;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -25,7 +26,12 @@ public class Contact05 {
 
     private String address;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "contact", referencedColumnName = "id")
     private Student05 student;
+
+    public void setStudent(Student05 student) {
+        this.student = student;
+        this.student.setContact(this);
+    }
 }

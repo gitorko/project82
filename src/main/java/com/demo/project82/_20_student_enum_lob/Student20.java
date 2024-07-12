@@ -31,8 +31,8 @@ public class Student20 {
     @Enumerated(EnumType.STRING)
     private StudentType studentType;
 
-    @Column(columnDefinition = "TEXT")
-    private String description;
+    @Column(columnDefinition = "text")
+    private String notes;
 
     @Lob
     private String content;

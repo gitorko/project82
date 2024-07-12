@@ -71,4 +71,7 @@ public class Student00 {
 
     @Lob
     private byte[] blob;
+
+    @Column(columnDefinition = "text")
+    private String notes;
 }

@@ -40,7 +40,7 @@ public class Teacher13 {
     /**
      * Use Set as it avoid hibernate bags which deletes all and add back.
      */
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "teachers")
+    @ManyToMany(mappedBy = "teachers", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @Builder.Default
     private Set<Student13> students = new HashSet<>();
 

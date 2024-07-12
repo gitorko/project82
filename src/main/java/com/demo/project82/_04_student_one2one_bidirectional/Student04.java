@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -28,13 +29,9 @@ public class Student04 {
     private String studentName;
 
     /**
-     * Bi-Directional
+     * One with the mappedBy in bi-directional controls the entity
      */
     @OneToOne(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Contact04 contact;
 
-    public void setContact(Contact04 contact) {
-        this.contact = contact;
-        this.contact.setStudent(this);
-    }
 }

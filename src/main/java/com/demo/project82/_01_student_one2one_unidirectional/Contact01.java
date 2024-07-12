@@ -24,15 +24,4 @@ public class Contact01 {
     private Long id;
 
     private String address;
-
-    /**
-     * Uni-Directional
-     * This table will need 2 index, one on the primary key and other on foreign key.
-     * Use @MapsId
-     *
-     * @JoinColumn - if name exists it will use it else will create a new column
-     */
-    @OneToOne
-    @JoinColumn(name = "customer_id")
-    private Student01 student;
 }

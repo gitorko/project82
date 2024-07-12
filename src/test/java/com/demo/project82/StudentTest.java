@@ -2,6 +2,7 @@ package com.demo.project82;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
@@ -17,38 +18,41 @@ import com.demo.project82._00_student_constraints.repo.Student00Repository;
 import com.demo.project82._01_student_one2one_unidirectional.Contact01;
 import com.demo.project82._01_student_one2one_unidirectional.Student01;
 import com.demo.project82._01_student_one2one_unidirectional.repo.Contact01Repository;
-import com.demo.project82._02_student_one2one_mapsid.Contact02;
-import com.demo.project82._02_student_one2one_mapsid.Student02;
-import com.demo.project82._02_student_one2one_mapsid.repo.Contact02Repository;
-import com.demo.project82._03_student_one2one_joincolumn.Contact03;
-import com.demo.project82._03_student_one2one_joincolumn.Student03;
-import com.demo.project82._03_student_one2one_joincolumn.repo.Contact03Repository;
+import com.demo.project82._01_student_one2one_unidirectional.repo.Student01Repository;
+import com.demo.project82._02_student_one2one_unidirectional_mapsid.Contact02;
+import com.demo.project82._02_student_one2one_unidirectional_mapsid.Student02;
+import com.demo.project82._02_student_one2one_unidirectional_mapsid.repo.Contact02Repository;
+import com.demo.project82._02_student_one2one_unidirectional_mapsid.repo.Student02Repository;
+import com.demo.project82._03_student_one2one_unidirectional_no_cascade.Contact03;
+import com.demo.project82._03_student_one2one_unidirectional_no_cascade.Student03;
+import com.demo.project82._03_student_one2one_unidirectional_no_cascade.repo.Contact03Repository;
+import com.demo.project82._03_student_one2one_unidirectional_no_cascade.repo.Student03Repository;
 import com.demo.project82._04_student_one2one_bidirectional.Contact04;
 import com.demo.project82._04_student_one2one_bidirectional.Student04;
 import com.demo.project82._04_student_one2one_bidirectional.repo.Contact04Repository;
 import com.demo.project82._04_student_one2one_bidirectional.repo.Student04Repository;
 import com.demo.project82._05_student_one2one_bidirectional_nplus1.Student05;
 import com.demo.project82._05_student_one2one_bidirectional_nplus1.repo.Student05Repository;
-import com.demo.project82._06_student_one2many_3tables.Student06;
-import com.demo.project82._06_student_one2many_3tables.repo.Student06Repository;
-import com.demo.project82._07_student_one2many_joincolumn.Course07;
-import com.demo.project82._07_student_one2many_joincolumn.Student07;
-import com.demo.project82._07_student_one2many_joincolumn.repo.Student07Repository;
-import com.demo.project82._08_student_one2many_joincolumn_nplus1.Student08;
-import com.demo.project82._08_student_one2many_joincolumn_nplus1.repo.Student08Repository;
-import com.demo.project82._09_student_one2many_mappedby_nplus1.Student09;
-import com.demo.project82._09_student_one2many_mappedby_nplus1.repo.Student09Repository;
-import com.demo.project82._10_student_one2many_bidirectional_mappedby.Course10;
-import com.demo.project82._10_student_one2many_bidirectional_mappedby.Student10;
-import com.demo.project82._10_student_one2many_bidirectional_mappedby.repo.Course10Repository;
-import com.demo.project82._10_student_one2many_bidirectional_mappedby.repo.Student10Repository;
+import com.demo.project82._06_student_one2many_3tables_unidirectional_wrong.Student06;
+import com.demo.project82._06_student_one2many_3tables_unidirectional_wrong.repo.Student06Repository;
+import com.demo.project82._07_student_one2many_unidirectional.Course07;
+import com.demo.project82._07_student_one2many_unidirectional.Student07;
+import com.demo.project82._07_student_one2many_unidirectional.repo.Student07Repository;
+import com.demo.project82._08_student_one2many_unidirectional_nplus1.Student08;
+import com.demo.project82._08_student_one2many_unidirectional_nplus1.repo.Student08Repository;
+import com.demo.project82._09_student_one2many_mappedby_wrong.Student09;
+import com.demo.project82._09_student_one2many_mappedby_wrong.repo.Student09Repository;
+import com.demo.project82._10_student_one2many_many2one_bidirectional_mappedby.Course10;
+import com.demo.project82._10_student_one2many_many2one_bidirectional_mappedby.Student10;
+import com.demo.project82._10_student_one2many_many2one_bidirectional_mappedby.repo.Course10Repository;
+import com.demo.project82._10_student_one2many_many2one_bidirectional_mappedby.repo.Student10Repository;
 import com.demo.project82._11_student_many2one_unidirectional.Course11;
 import com.demo.project82._11_student_many2one_unidirectional.Student11;
 import com.demo.project82._11_student_many2one_unidirectional.repo.Course11Repository;
 import com.demo.project82._11_student_many2one_unidirectional.repo.Student11Repository;
-import com.demo.project82._12_student_elementcollection.Phone12;
-import com.demo.project82._12_student_elementcollection.Student12;
-import com.demo.project82._12_student_elementcollection.repo.Student12Repository;
+import com.demo.project82._12_student_one2many_elementcollection_unidirectional.Phone12;
+import com.demo.project82._12_student_one2many_elementcollection_unidirectional.Student12;
+import com.demo.project82._12_student_one2many_elementcollection_unidirectional.repo.Student12Repository;
 import com.demo.project82._13_student_many2many_bidirectional.Student13;
 import com.demo.project82._13_student_many2many_bidirectional.Teacher13;
 import com.demo.project82._13_student_many2many_bidirectional.repo.Student13Repository;
@@ -57,16 +61,19 @@ import com.demo.project82._14_student_many2many_unidirectional.Student14;
 import com.demo.project82._14_student_many2many_unidirectional.Teacher14;
 import com.demo.project82._14_student_many2many_unidirectional.repo.Student14Repository;
 import com.demo.project82._14_student_many2many_unidirectional.repo.Teacher14Repository;
-import com.demo.project82._15_student_many2many_bidirectional_without.Student15;
-import com.demo.project82._15_student_many2many_bidirectional_without.Teacher15;
-import com.demo.project82._15_student_many2many_bidirectional_without.repo.Student15Repository;
-import com.demo.project82._15_student_many2many_bidirectional_without.repo.Teacher15Repository;
-import com.demo.project82._16_student_one2many_jointable.Course16;
-import com.demo.project82._16_student_one2many_jointable.Student16;
-import com.demo.project82._16_student_one2many_jointable.repo.Student16Repository;
+import com.demo.project82._15_student_many2many_bidirectional_jointable.Student15;
+import com.demo.project82._15_student_many2many_bidirectional_jointable.Teacher15;
+import com.demo.project82._15_student_many2many_bidirectional_jointable.repo.Student15Repository;
+import com.demo.project82._15_student_many2many_bidirectional_jointable.repo.Teacher15Repository;
+import com.demo.project82._16_student_one2many_jointable_unidirectional.Course16;
+import com.demo.project82._16_student_one2many_jointable_unidirectional.Student16;
+import com.demo.project82._16_student_one2many_jointable_unidirectional.repo.Student16Repository;
 import com.demo.project82._17_student_one2many_jointable_mapkey.Course17;
 import com.demo.project82._17_student_one2many_jointable_mapkey.Student17;
 import com.demo.project82._17_student_one2many_jointable_mapkey.repo.Student17Repository;
+import com.demo.project82._18_student_one2one_jointable_unidirectional.Contact18;
+import com.demo.project82._18_student_one2one_jointable_unidirectional.Student18;
+import com.demo.project82._18_student_one2one_jointable_unidirectional.repo.Student18Repository;
 import com.demo.project82._20_student_enum_lob.Student20;
 import com.demo.project82._20_student_enum_lob.StudentType;
 import com.demo.project82._20_student_enum_lob.repo.Student20Repository;
@@ -91,7 +98,6 @@ import com.demo.project82._27_student_inheritance.repo.Student27Repository;
 import com.demo.project82._28_student_projections.Student28;
 import com.demo.project82._28_student_projections.Student28View;
 import com.demo.project82._28_student_projections.repo.Student28Repository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -117,6 +123,15 @@ public class StudentTest extends BaseTest {
 
     @Autowired
     Student00Repository student00Repository;
+
+    @Autowired
+    Student01Repository student01Repository;
+
+    @Autowired
+    Student02Repository student02Repository;
+
+    @Autowired
+    Student03Repository student03Repository;
 
     @Autowired
     Student04Repository student04Repository;
@@ -159,6 +174,9 @@ public class StudentTest extends BaseTest {
 
     @Autowired
     Student17Repository student17Repository;
+
+    @Autowired
+    Student18Repository student18Repository;
 
     @Autowired
     Student20Repository student20Repository;
@@ -216,10 +234,11 @@ public class StudentTest extends BaseTest {
                 .age(40)
                 .email("email@email.com")
                 .gpaScore(BigDecimal.valueOf(9.9))
+                .notes("something about student")
                 .blob(photo.getBytes(StandardCharsets.UTF_8))
                 .build();
         Student00 savedStudent = student00Repository.save(student);
-        System.out.println("student: " + student);
+        System.out.println("Student: " + student);
         assertNotNull(savedStudent.getId());
         assertNotNull(savedStudent.getDob());
         assertNotNull(savedStudent.getRegistered_on());
@@ -227,43 +246,52 @@ public class StudentTest extends BaseTest {
 
     @Test
     public void test_01_student_one2one_unidirectional() {
-        Student01 student = Student01.builder().studentName("Jack").build();
-        Contact01 contact = Contact01.builder().address("bangalore").student(student).build();
-        Contact01 savedContact = contact01Repository.save(contact);
-        //No cascade so student is not saved.
-        Assertions.assertNull(savedContact.getStudent().getId());
-        assertNotNull(savedContact.getId());
+        Contact01 contact = Contact01.builder().address("Bangalore").build();
+        Student01 student = Student01.builder().studentName("Jack").contact(contact).build();
+        Student01 savedStudent = student01Repository.save(student);
+        assertNotNull(savedStudent.getId());
+        assertNotNull(savedStudent.getContact().getId());
     }
 
     @Test
-    public void test_02_student_one2one_mapsid() {
-        Student02 student = Student02.builder().studentName("Jack").build();
-        Contact02 contact = Contact02.builder().address("bangalore").student(student).build();
-        Contact02 savedContact = contact02Repository.save(contact);
-        //No cascade so student but still saved.
-        assertNotNull(savedContact.getStudent().getId());
-        assertNotNull(savedContact.getId());
+    public void test_02_student_one2one_unidirectional_mapsid() {
+        Contact02 contact = Contact02.builder().address("Bangalore").build();
+        Student02 student = Student02.builder().studentName("Jack").contact(contact).build();
+        Student02 savedStudent = student02Repository.save(student);
+        //No cascade but contact still saved.
+        assertNotNull(savedStudent.getId());
+        assertNotNull(savedStudent.getContact().getId());
     }
 
     @Test
-    public void test_03_student_one2one_joincolumn() {
-        Student03 student = Student03.builder().studentName("Jack").build();
-        Contact03 contact = Contact03.builder().address("bangalore").student(student).build();
-        Contact03 savedContact = contact03Repository.save(contact);
-        //cascade so student is saved.
-        assertNotNull(savedContact.getStudent().getId());
-        assertNotNull(savedContact.getId());
+    public void test_03_student_one2one_unidirectional_no_cascade() {
+        Contact03 contact = Contact03.builder().address("Bangalore").build();
+        Student03 student = Student03.builder().studentName("Jack").contact(contact).build();
+        Student03 savedStudent = student03Repository.save(student);
+        //no cascade so contact is not saved.
+        assertNotNull(savedStudent.getId());
+        assertNull(savedStudent.getContact().getId());
     }
 
     @Test
     public void test_04_student_one2one_bidirectional() {
-        Contact04 contact = Contact04.builder().address("bangalore").build();
-        Student04 student = Student04.builder().studentName("Jack").contact(contact).build();
-        Student04 savedStudent = student04Repository.save(student);
+        Contact04 contact1 = Contact04.builder().address("Bangalore").build();
+        Student04 student1 = Student04.builder().studentName("Jack").contact(contact1).build();
+
+        Student04 savedStudent = student04Repository.save(student1);
         assertNotNull(savedStudent.getContact().getId());
         assertNotNull(savedStudent.getId());
-        Optional<Student04> studentOptional = student04Repository.findById(student.getId());
+        Optional<Student04> studentOptional = student04Repository.findById(savedStudent.getId());
         assertNotNull(studentOptional.get().getContact().getId());
+
+        Student04 student2 = Student04.builder().studentName("Jack").build();
+        Contact04 contact2 = Contact04.builder().address("Bangalore").student(student2).build();
+
+        Contact04 savedContact = contact04Repository.save(contact2);
+        assertNotNull(savedContact.getStudent().getId());
+        assertNotNull(savedContact.getId());
+        Optional<Contact04> contactOptional = contact04Repository.findById(savedContact.getId());
+        assertNotNull(contactOptional.get().getStudent().getId());
     }
 
     @Test
@@ -278,7 +306,7 @@ public class StudentTest extends BaseTest {
 
     @Test
     public void test_05_student_one2one_bidirectional_nplus1_fixed() {
-        //No N+1 problem
+        //N+1 problem solved
         Iterable<Student05> studentList = student05Repository.findAll();
         studentList.forEach(e -> {
             assertNotNull(e.getId());
@@ -571,6 +599,15 @@ public class StudentTest extends BaseTest {
     }
 
     @Test
+    public void test_18_student_one2one_jointable_unidirectional() {
+        Contact18 contact = Contact18.builder().address("Bangalore").build();
+        Student18 student = Student18.builder().studentName("Jack").contact(contact).build();
+        Student18 savedStudent = student18Repository.save(student);
+        assertNotNull(savedStudent.getId());
+        assertNotNull(savedStudent.getContact().getId());
+    }
+
+    @Test
     public void test_20_student_enum_lob() {
         Student20 student = Student20.builder()
                 .studentName("Jack")
@@ -682,6 +719,7 @@ public class StudentTest extends BaseTest {
     public void test_28_student_projections() {
         Student28 student = Student28.builder()
                 .studentName("Jack")
+                .notes("something about student")
                 .build();
         Student28 savedStudent = student28Repository.save(student);
         assertNotNull(savedStudent.getId());
