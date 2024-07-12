@@ -11,3 +11,13 @@ spring:
   sql:
     init:
       mode: always
+  datasource:
+    hikari:
+      connection-timeout: 60000
+      maximum-pool-size: 5
+      idle-timeout: 30000
+      pool-name: SpringBootHikariCP
+      minimum-idle: 3
+      max-lifetime: 1800000
+      connection-test-query: SELECT 1
+      auto-commit: false

@@ -14,6 +14,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+/**
+ * Don't use these, let liquibase create the constraints.
+ */
 @Table(name = "student_22", uniqueConstraints = {
         @UniqueConstraint(columnNames = {
                 "user_name"

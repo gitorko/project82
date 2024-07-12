@@ -1,5 +1,7 @@
 package com.demo.project82._00_student_constraints;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 import jakarta.persistence.Column;
@@ -10,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -39,14 +42,29 @@ public class Student00 {
     private String studentName;
 
     @NotNull
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "posted_at")
+    @NotBlank
+    @Size(max = 100)
+    @Column(name = "user_name", updatable = false, insertable = false, unique = true, nullable = false)
+    private String userName;
+
+    @NotNull
+    @Temporal(TemporalType.DATE)
+    @Column(name = "date_of_birth")
     private Date dob;
+
+    @NotNull
+    @Column(name = "registered_on")
+    private LocalDate registered_on;
 
     @Min(18)
     @Max(55)
     private Integer age;
 
     @Email
+    @NotBlank
     private String email;
+
+    @Digits(integer = 1, fraction = 2)
+    @Column(name = "gpa_score", precision = 3, scale = 2)
+    private BigDecimal gpaScore;
 }

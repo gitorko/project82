@@ -3,6 +3,8 @@ package com.demo.project82;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -91,8 +93,12 @@ import com.demo.project82._28_student_projections.repo.Student28Repository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
+@Testcontainers
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
 public class StudentTest extends BaseTest {
 
@@ -202,11 +208,18 @@ public class StudentTest extends BaseTest {
     public void test_00_student_constraints() {
         Student00 student = Student00.builder()
                 .studentName("Jack")
+                .userName("jack")
                 .dob(new Date())
+                .registered_on(LocalDate.now())
                 .age(40)
+                .email("email@email.com")
+                .gpaScore(BigDecimal.valueOf(9.9))
                 .build();
-        Student00 savedStudent00 = student00Repository.save(student);
-        assertNotNull(savedStudent00.getId());
+        Student00 savedStudent = student00Repository.save(student);
+        System.out.println("student: " + student);
+        assertNotNull(savedStudent.getId());
+        assertNotNull(savedStudent.getDob());
+        assertNotNull(savedStudent.getRegistered_on());
     }
 
     @Test

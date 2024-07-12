@@ -8,6 +8,15 @@ spring:
     url: jdbc:postgresql://${spring.datasource.host}:5432/test-db
     username: test
     password: test@123
+    hikari:
+      connection-timeout: 60000
+      maximum-pool-size: 5
+      idle-timeout: 30000
+      pool-name: SpringBootHikariCP
+      minimum-idle: 3
+      max-lifetime: 1800000
+      connection-test-query: SELECT 1
+      auto-commit: false
   jpa:
     hibernate.ddl-auto: create
     properties.hibernate.temp.use_jdbc_metadata_defaults: false
