@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -67,4 +68,7 @@ public class Student00 {
     @Digits(integer = 1, fraction = 2)
     @Column(name = "gpa_score", precision = 3, scale = 2)
     private BigDecimal gpaScore;
+
+    @Lob
+    private byte[] blob;
 }

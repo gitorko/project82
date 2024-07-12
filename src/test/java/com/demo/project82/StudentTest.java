@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
@@ -206,6 +207,7 @@ public class StudentTest extends BaseTest {
 
     @Test
     public void test_00_student_constraints() {
+        String photo = "photo";
         Student00 student = Student00.builder()
                 .studentName("Jack")
                 .userName("jack")
@@ -214,6 +216,7 @@ public class StudentTest extends BaseTest {
                 .age(40)
                 .email("email@email.com")
                 .gpaScore(BigDecimal.valueOf(9.9))
+                .blob(photo.getBytes(StandardCharsets.UTF_8))
                 .build();
         Student00 savedStudent = student00Repository.save(student);
         System.out.println("student: " + student);
