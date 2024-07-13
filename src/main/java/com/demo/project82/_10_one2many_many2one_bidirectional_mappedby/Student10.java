@@ -37,39 +37,24 @@ public class Student10 {
     @Column(name = "student_name")
     private String studentName;
 
-    /**
-     * bidirectional @OneToMany association is the best way to map a one-to-many database relationship
-     * when we really need the collection on the parent side of the association.
-     */
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Course10> courses = new ArrayList<>();
 
     /**
-     * We use this to synchronize both sides of the bidirectional association.
-     * You should always provide these methods whenever you are working with a bidirectional association
-     * Otherwise, you risk very subtle state propagation issues.
+     * Add method in parent (Student10) to ensure both sides in sync.
      */
     public void addCourse(Course10 course) {
         this.courses.add(course);
         course.setStudent(this);
     }
 
+    /**
+     * Remove method in parent (Student10) to ensure both sides in sync.
+     */
     public void removeCourse(Course10 course) {
         this.courses.remove(course);
         course.setStudent(null);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Student10)) return false;
-        return id != null && id.equals(((Student10) o).getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(this);
     }
 
 }

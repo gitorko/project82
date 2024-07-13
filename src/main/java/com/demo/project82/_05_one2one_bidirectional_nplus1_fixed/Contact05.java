@@ -30,8 +30,4 @@ public class Contact05 {
     @JoinColumn(name = "contact", referencedColumnName = "id")
     private Student05 student;
 
-    public void setStudent(Student05 student) {
-        this.student = student;
-        this.student.setContact(this);
-    }
 }

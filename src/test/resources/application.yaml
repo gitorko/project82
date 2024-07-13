@@ -8,6 +8,8 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+        use_sql_comments: false
+        generate_statistics: false
   sql:
     init:
       mode: always

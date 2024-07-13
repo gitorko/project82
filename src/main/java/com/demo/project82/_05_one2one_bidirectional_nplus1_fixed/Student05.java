@@ -35,12 +35,15 @@ public class Student05 {
     private String studentName;
 
     /**
-     * One with the mappedBy in bi-directional controls the entity
+     * mappedBy informs that child (Contacts05) will manage the association
      */
     @OneToOne(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Contact05 contact;
 
-    public void setContact(Contact05 contact) {
+    /**
+     * Add method in parent (Student05) to ensure both sides in sync.
+     */
+    public void addContact(Contact05 contact) {
         this.contact = contact;
         this.contact.setStudent(this);
     }

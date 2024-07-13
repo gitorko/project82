@@ -98,3 +98,29 @@ insert into phone_12 (phone_id, phone) values (100, '998-999-99999');
 insert into student_12 (id, student_name) values (101, 'jack');
 insert into phone_12 (phone_id, phone) values (101, '997-999-99999');
 insert into phone_12 (phone_id, phone) values (101, '996-999-99999');
+
+-- insert data to student_14
+
+insert into student_14 (id, student_name) values (100, 'raj');
+insert into student_14 (id, student_name) values (101, 'david');
+insert into teacher_14 (id, teacher_name) values (200, 'Mr. Adams');
+insert into teacher_14 (id, teacher_name) values (201, 'Mr. Smith');
+
+insert into student_14_teacher_join(student_id, teacher_id) values (100, 200);
+insert into student_14_teacher_join(student_id, teacher_id) values (100, 201);
+
+insert into student_14_teacher_join(student_id, teacher_id) values (101, 200);
+insert into student_14_teacher_join(student_id, teacher_id) values (101, 201);
+
+-- insert data to student_19
+
+insert into student_19 (id, student_name) values (100, 'raj');
+insert into course_19 (id, student_id, course_name) values (200, 100, 'mathematics');
+insert into course_19 (id, student_id, course_name) values (201, 100, 'history');
+insert into course_19 (id, student_id, course_name) values (202, 100, 'physics');
+
+insert into student_19 (id, student_name) values (101, 'jack');
+insert into course_19 (id, student_id, course_name)  values (203, 101, 'chemistry');
+insert into course_19 (id, student_id, course_name)  values (204, 101, 'history');
+insert into course_19 (id, student_id, course_name)  values (205, 101, 'physics');
+

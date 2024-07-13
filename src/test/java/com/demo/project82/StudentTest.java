@@ -61,10 +61,10 @@ import com.demo.project82._14_many2many_unidirectional.Student14;
 import com.demo.project82._14_many2many_unidirectional.Teacher14;
 import com.demo.project82._14_many2many_unidirectional.repo.Student14Repository;
 import com.demo.project82._14_many2many_unidirectional.repo.Teacher14Repository;
-import com.demo.project82._15_many2many_bidirectional_jointable.Student15;
-import com.demo.project82._15_many2many_bidirectional_jointable.Teacher15;
-import com.demo.project82._15_many2many_bidirectional_jointable.repo.Student15Repository;
-import com.demo.project82._15_many2many_bidirectional_jointable.repo.Teacher15Repository;
+import com.demo.project82._15_many2many_jointable_bidirectional.Student15;
+import com.demo.project82._15_many2many_jointable_bidirectional.Teacher15;
+import com.demo.project82._15_many2many_jointable_bidirectional.repo.Student15Repository;
+import com.demo.project82._15_many2many_jointable_bidirectional.repo.Teacher15Repository;
 import com.demo.project82._16_one2many_jointable_unidirectional.Course16;
 import com.demo.project82._16_one2many_jointable_unidirectional.Student16;
 import com.demo.project82._16_one2many_jointable_unidirectional.repo.Student16Repository;
@@ -102,10 +102,13 @@ import com.demo.project82._27_inheritance.repo.Student27Repository;
 import com.demo.project82._28_projections.Student28;
 import com.demo.project82._28_projections.Student28View;
 import com.demo.project82._28_projections.repo.Student28Repository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Testcontainers
@@ -232,6 +235,34 @@ public class StudentTest extends BaseTest {
 
     @Autowired
     Teacher15Repository teacher15Repository;
+
+    @Autowired
+    private TransactionTemplate transactionTemplate;
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Test
+    public void test_00_constraints_entityManager() {
+        transactionTemplate.executeWithoutResult(status -> {
+            String photo = "photo";
+            Student00 student = Student00.builder()
+                    .studentName("Jack")
+                    .userName("jack")
+                    .dob(new Date())
+                    .registered_on(LocalDate.now())
+                    .age(40)
+                    .email("email@email.com")
+                    .gpaScore(BigDecimal.valueOf(9.9))
+                    .notes("something about student")
+                    .blob(photo.getBytes(StandardCharsets.UTF_8))
+                    .build();
+            entityManager.persist(student);
+            entityManager.flush();
+            entityManager.clear();
+            System.out.println("Student: " + student);
+        });
+    }
 
     @Test
     public void test_00_constraints() {
@@ -521,7 +552,7 @@ public class StudentTest extends BaseTest {
     }
 
     @Test
-    public void test_14_many2many_unidirectional() {
+    public void test_14_many2many_unidirectional_save() {
         Teacher14 teacher1 = Teacher14.builder()
                 .teacherName("Mr. Adam")
                 .build();
@@ -548,7 +579,26 @@ public class StudentTest extends BaseTest {
     }
 
     @Test
-    public void test_15_many2many_bidirectional_jointable() {
+    public void test_14_many2many_unidirectional_delete() {
+
+        Student14 savedStudent1 = student14Repository.findById(100l).orElseGet(null);
+        Student14 savedStudent2 = student14Repository.findById(101l).orElse(null);
+
+        Teacher14 savedTeacher1 = teacher14Repository.findById(200l).orElse(null);
+        Teacher14 savedTeacher2 = teacher14Repository.findById(201l).orElse(null);
+
+        savedStudent1.removeTeacher(savedTeacher1);
+        student14Repository.save(savedStudent1);
+
+        savedStudent1 = student14Repository.findById(100l).orElseGet(null);
+        assertEquals(1, savedStudent1.getTeachers().size());
+
+        savedStudent2 = student14Repository.findById(101l).orElseGet(null);
+        assertEquals(2, savedStudent2.getTeachers().size());
+    }
+
+    @Test
+    public void test_15_many2many_jointable_bidirectional() {
         Teacher15 teacher1 = Teacher15.builder()
                 .teacherName("Mr. Adam")
                 .build();
@@ -625,7 +675,7 @@ public class StudentTest extends BaseTest {
     }
 
     @Test
-    public void test_19_one2many_unidirectional() {
+    public void test_19_one2many_unidirectional_save() {
         Student19 student = Student19.builder()
                 .studentName("Jack")
                 .build();
@@ -636,6 +686,20 @@ public class StudentTest extends BaseTest {
         Course19 savedCourse = course19Repository.save(course);
         assertNotNull(savedCourse.getId());
         assertNotNull(savedCourse.getStudent().getId());
+    }
+
+    @Test
+    public void test_19_one2many_unidirectional_find() {
+        Iterable<Student19> students = student19Repository.findAll();
+        students.forEach(e -> {
+            System.out.println("Student: " + e);
+            List<Course19> courses = course19Repository.findAllByStudent(e);
+            assertEquals(3, courses.size());
+            courses.forEach(c -> {
+                System.out.println("Student: " + e + ", Course: " + c);
+                assertNotNull(c.getId());
+            });
+        });
     }
 
     @Test

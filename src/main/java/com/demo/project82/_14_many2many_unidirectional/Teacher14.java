@@ -25,4 +25,18 @@ public class Teacher14 {
     @Column(name = "teacher_name")
     private String teacherName;
 
+    /**
+     * The child entity needs to implement the equals and hashCode methods.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Teacher14)) return false;
+        return id != null && id.equals(((Teacher14) o).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

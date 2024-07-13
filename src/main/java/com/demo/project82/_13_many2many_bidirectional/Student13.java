@@ -1,6 +1,7 @@
 package com.demo.project82._13_many2many_bidirectional;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -46,5 +47,21 @@ public class Student13 {
 
     public void addTeacher(Teacher13 teacher) {
         teachers.add(teacher);
+    }
+
+    public void removeTeacher(Teacher13 teacher) {
+        teachers.remove(teacher);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Student13)) return false;
+        return id != null && id.equals(((Student13) o).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

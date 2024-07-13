@@ -1,7 +1,6 @@
 package com.demo.project82._24_composite_key;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotNull;
@@ -34,7 +33,7 @@ public class Student24Identity implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(this);
+        return getClass().hashCode();
     }
 
 }

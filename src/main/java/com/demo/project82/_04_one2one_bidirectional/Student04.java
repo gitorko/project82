@@ -1,5 +1,6 @@
 package com.demo.project82._04_one2one_bidirectional;
 
+import com.demo.project82._05_one2one_bidirectional_nplus1_fixed.Contact05;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,9 +29,16 @@ public class Student04 {
     private String studentName;
 
     /**
-     * One with the mappedBy in bi-directional controls the entity
+     * mappedBy informs that child (Contacts04) will manage the association
      */
     @OneToOne(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Contact04 contact;
 
+    /**
+     * Add method in parent (Student04) to ensure both sides in sync.
+     */
+    public void addContact(Contact04 contact) {
+        this.contact = contact;
+        this.contact.setStudent(this);
+    }
 }

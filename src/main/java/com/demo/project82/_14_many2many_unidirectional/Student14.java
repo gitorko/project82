@@ -43,4 +43,8 @@ public class Student14 {
     public void addTeacher(Teacher14 teacher) {
         teachers.add(teacher);
     }
+
+    public void removeTeacher(Teacher14 teacher) {
+        teachers.remove(teacher);
+    }
 }

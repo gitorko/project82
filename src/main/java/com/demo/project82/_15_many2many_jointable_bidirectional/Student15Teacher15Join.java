@@ -1,4 +1,4 @@
-package com.demo.project82._15_many2many_bidirectional_jointable;
+package com.demo.project82._15_many2many_jointable_bidirectional;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;

@@ -45,7 +45,7 @@ public class Student00 {
     @NotNull
     @NotBlank
     @Size(max = 100)
-    @Column(name = "user_name", updatable = false, insertable = false, unique = true, nullable = false)
+    @Column(name = "user_name")
     private String userName;
 
     @NotNull
@@ -74,4 +74,7 @@ public class Student00 {
 
     @Column(columnDefinition = "text")
     private String notes;
+
+    @Column(name = "history", updatable = false, insertable = false, unique = false, nullable = true)
+    private String history;
 }

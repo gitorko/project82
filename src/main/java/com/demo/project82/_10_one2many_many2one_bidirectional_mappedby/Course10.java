@@ -1,7 +1,5 @@
 package com.demo.project82._10_one2many_many2one_bidirectional_mappedby;
 
-import java.util.Objects;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -45,8 +43,7 @@ public class Course10 {
     private Student10 student;
 
     /**
-     * The child entity implements the equals and hashCode methods.
-     * Since we cannot rely on a natural identifier for equality checks, we need to use the entity identifier instead for the equals method.
+     * The child entity needs to implement the equals and hashCode methods.
      */
     @Override
     public boolean equals(Object o) {
@@ -57,6 +54,6 @@ public class Course10 {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(this);
+        return getClass().hashCode();
     }
 }
