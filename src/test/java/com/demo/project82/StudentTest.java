@@ -74,6 +74,10 @@ import com.demo.project82._17_one2many_jointable_mapkey.repo.Student17Repository
 import com.demo.project82._18_one2one_jointable_unidirectional.Contact18;
 import com.demo.project82._18_one2one_jointable_unidirectional.Student18;
 import com.demo.project82._18_one2one_jointable_unidirectional.repo.Student18Repository;
+import com.demo.project82._19_one2many_unidirectional.Course19;
+import com.demo.project82._19_one2many_unidirectional.Student19;
+import com.demo.project82._19_one2many_unidirectional.repo.Course19Repository;
+import com.demo.project82._19_one2many_unidirectional.repo.Student19Repository;
 import com.demo.project82._20_enum_lob.Student20;
 import com.demo.project82._20_enum_lob.StudentType;
 import com.demo.project82._20_enum_lob.repo.Student20Repository;
@@ -179,6 +183,9 @@ public class StudentTest extends BaseTest {
     Student18Repository student18Repository;
 
     @Autowired
+    Student19Repository student19Repository;
+
+    @Autowired
     Student20Repository student20Repository;
 
     @Autowired
@@ -213,6 +220,9 @@ public class StudentTest extends BaseTest {
 
     @Autowired
     Course11Repository course11Repository;
+
+    @Autowired
+    Course19Repository course19Repository;
 
     @Autowired
     Teacher13Repository teacher13Repository;
@@ -602,8 +612,13 @@ public class StudentTest extends BaseTest {
 
     @Test
     public void test_18_one2one_jointable_unidirectional() {
-        Contact18 contact = Contact18.builder().address("Bangalore").build();
-        Student18 student = Student18.builder().studentName("Jack").contact(contact).build();
+        Contact18 contact = Contact18.builder()
+                .address("Bangalore")
+                .build();
+        Student18 student = Student18.builder()
+                .studentName("Jack")
+                .contact(contact)
+                .build();
         Student18 savedStudent = student18Repository.save(student);
         assertNotNull(savedStudent.getId());
         assertNotNull(savedStudent.getContact().getId());
@@ -611,7 +626,16 @@ public class StudentTest extends BaseTest {
 
     @Test
     public void test_19_one2many_unidirectional() {
-
+        Student19 student = Student19.builder()
+                .studentName("Jack")
+                .build();
+        Course19 course = Course19.builder()
+                .courseName("physics")
+                .student(student)
+                .build();
+        Course19 savedCourse = course19Repository.save(course);
+        assertNotNull(savedCourse.getId());
+        assertNotNull(savedCourse.getStudent().getId());
     }
 
     @Test
