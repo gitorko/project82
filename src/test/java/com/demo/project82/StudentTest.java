@@ -100,6 +100,8 @@ import com.demo.project82._26_embeddable.repo.Teacher26Repository;
 import com.demo.project82._27_inheritance.Student27;
 import com.demo.project82._27_inheritance.repo.Student27Repository;
 import com.demo.project82._28_projections.Student28;
+import com.demo.project82._28_projections.Student28DTO;
+import com.demo.project82._28_projections.Student28Pojo;
 import com.demo.project82._28_projections.Student28View;
 import com.demo.project82._28_projections.repo.Student28Repository;
 import jakarta.persistence.EntityManager;
@@ -815,11 +817,19 @@ public class StudentTest extends BaseTest {
         Student28 student = Student28.builder()
                 .studentName("Jack")
                 .notes("something about student")
+                .monthlySalary(5000)
                 .build();
         Student28 savedStudent = student28Repository.save(student);
         assertNotNull(savedStudent.getId());
+
         Student28View student27View = student28Repository.getStudent27View(savedStudent.getStudentName());
-        assertNotNull("Jack", student27View.getStudentName());
+        assertEquals(60000, student27View.getAnnualSalary());
+
+        Student28DTO student27Dto = student28Repository.getStudent27Dto(savedStudent.getStudentName());
+        assertEquals(60000, student27Dto.annualSalary());
+
+        Student28Pojo student27Pojo = student28Repository.getStudent27Pojo(savedStudent.getStudentName());
+        assertEquals(60000, student27Pojo.getAnnualSalary());
     }
 
 }

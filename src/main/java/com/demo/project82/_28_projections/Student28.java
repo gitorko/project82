@@ -6,6 +6,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +27,10 @@ public class Student28 {
 
     @NotBlank
     private String studentName;
+
+    @Min(5000)
+    @Max(20000)
+    private Integer monthlySalary;
 
     @Column(columnDefinition = "text")
     private String notes;
