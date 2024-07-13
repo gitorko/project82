@@ -27,12 +27,17 @@ spring:
       hibernate:
         show_sql: false
         format_sql: false
+        connection:
+          isolation: 2
+  sql:
+    init:
+      mode: always
 logging:
   level:
     root: info
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-    org.hibernate.orm.jdbc.bind: TRACE
-    org.springframework.orm.jpa: DEBUG
-    org.hibernate.event.internal: TRACE
-    org.hibernate.internal.SessionImpl: TRACE
+#    org.hibernate.SQL: DEBUG
+#    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+#    org.hibernate.orm.jdbc.bind: TRACE
+#    org.springframework.orm.jpa: DEBUG
+#    org.hibernate.event.internal: TRACE
+#    org.hibernate.internal.SessionImpl: TRACE

@@ -7,7 +7,7 @@ import org.testcontainers.junit.jupiter.Container;
 
 public abstract class BaseTest {
     @Container
-    static PostgreSQLContainer postgresqlContainer = (PostgreSQLContainer) new PostgreSQLContainer("postgres:11.1")
+    static PostgreSQLContainer postgresqlContainer = (PostgreSQLContainer) new PostgreSQLContainer("postgres:14")
             .withDatabaseName("test-db")
             .withUsername("sa")
             .withPassword("sa")

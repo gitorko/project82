@@ -12,6 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import com.demo.project82._00_constraints.Student00;
 import com.demo.project82._00_constraints.repo.Student00Repository;
@@ -104,19 +108,30 @@ import com.demo.project82._28_projections.Student28DTO;
 import com.demo.project82._28_projections.Student28Pojo;
 import com.demo.project82._28_projections.Student28View;
 import com.demo.project82._28_projections.repo.Student28Repository;
+import com.demo.project82._29_pessimistic_locking.repo.Student29Repository;
+import com.demo.project82._30_optimistic_locking.Student30;
+import com.demo.project82._30_optimistic_locking.repo.Student30Repository;
+import com.demo.project82._31_java_records.Student31Record;
+import com.demo.project82._31_java_records.repo.Student31Converter;
+import com.demo.project82._31_java_records.service.Student31Service;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Testcontainers
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
+@Import({Student31Service.class, Student31Converter.class})
 public class StudentTest extends BaseTest {
+
+    final ExecutorService threadPool = Executors.newFixedThreadPool(2);
 
     @Autowired
     Contact01Repository contact01Repository;
@@ -218,6 +233,12 @@ public class StudentTest extends BaseTest {
     Student28Repository student28Repository;
 
     @Autowired
+    Student29Repository student29Repository;
+
+    @Autowired
+    Student30Repository student30Repository;
+
+    @Autowired
     Teacher26Repository teacher26Repository;
 
     @Autowired
@@ -239,10 +260,13 @@ public class StudentTest extends BaseTest {
     Teacher15Repository teacher15Repository;
 
     @Autowired
-    private TransactionTemplate transactionTemplate;
+    TransactionTemplate transactionTemplate;
+
+    @Autowired
+    Student31Service student31Service;
 
     @PersistenceContext
-    private EntityManager entityManager;
+    EntityManager entityManager;
 
     @Test
     public void test_00_constraints_entityManager() {
@@ -830,6 +854,40 @@ public class StudentTest extends BaseTest {
 
         Student28Pojo student27Pojo = student28Repository.getStudent27Pojo(savedStudent.getStudentName());
         assertEquals(60000, student27Pojo.getAnnualSalary());
+    }
+
+    @Test
+    public void test_30_optimistic_locking_multi_thread() throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(2);
+        modifyStudent30(100l, latch);
+        modifyStudent30(100l, latch);
+        latch.await(5, TimeUnit.SECONDS);
+        Student30 student = student30Repository.findById(100l).orElseThrow();
+        System.out.println("Student: " + student);
+    }
+
+    private void modifyStudent30(Long id, CountDownLatch latch) {
+        threadPool.submit(() -> {
+            try {
+                Student30 student = student30Repository.findById(id).orElseThrow();
+                student.setStudentName(student.getStudentName() + "_" + Thread.currentThread().getName());
+                //Delay so that version is updated before next thread saves.
+                TimeUnit.SECONDS.sleep(5);
+                student30Repository.save(student);
+            } catch (ObjectOptimisticLockingFailureException | InterruptedException ex) {
+                ex.printStackTrace();
+                assertEquals(ObjectOptimisticLockingFailureException.class, ex.getClass());
+            } finally {
+                latch.countDown();
+            }
+        });
+    }
+
+    @Test
+    public void test_31_java_records() {
+        Student31Record student = new Student31Record(null, "jack");
+        Student31Record savedStudent = student31Service.save(student);
+        assertNotNull(savedStudent.id());
     }
 
 }

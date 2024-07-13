@@ -48,6 +48,9 @@ public class Student00 {
     @Column(name = "user_name")
     private String userName;
 
+    /**
+     * @Temporal - need only for java.util.Date, don't use for java.time classes
+     */
     @NotNull
     @Temporal(TemporalType.DATE)
     @Column(name = "date_of_birth")
