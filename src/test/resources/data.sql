@@ -126,4 +126,4 @@ insert into course_19 (id, student_id, course_name)  values (205, 101, 'physics'
 
 -- insert data to student_30
 
-insert into student_30 (id, student_name, updated_count) values (100, 'raj', 0);
+insert into student_30 (id, student_name, amount, updated_count) values (100, 'raj', 100, 0);

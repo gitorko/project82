@@ -5,6 +5,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,6 +29,10 @@ public class Student29 {
     @NotBlank
     private String studentName;
 
-    @Builder.Default
-    private Integer updatedCount = 0;
+    @Min(0)
+    @Max(10000)
+    private Double amount;
+
+    @Version
+    private Integer updatedCount;
 }

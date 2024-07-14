@@ -64,6 +64,7 @@ public class Main {
         student = student30Repository.findById(100l).orElseThrow();
         log.info("[testOptimisticLocking] Student After: {}", student);
         assert student.getUpdatedCount() == 1;
+        assert student.getAmount() == 110;
     }
 
     public void testPessimisticLocking() throws InterruptedException {
@@ -81,13 +82,14 @@ public class Main {
         student = student29Repository.findById(100l).orElseThrow();
         log.info("[testPessimisticLocking] Student After: {}", student);
         assert student.getUpdatedCount() == 1;
+        assert student.getAmount() == 110;
     }
 
     private void modifyStudent30(Long id, CountDownLatch latch, ExecutorService threadPool) {
         threadPool.submit(() -> {
             try {
                 Student30 student = student30Repository.findById(id).orElseThrow();
-                student.setStudentName(student.getStudentName() + "_" + Thread.currentThread().getName());
+                student.setAmount(student.getAmount() + 10);
                 //Delay so that version is updated before next thread saves.
                 TimeUnit.SECONDS.sleep(5);
                 student30Repository.save(student);
@@ -99,7 +101,7 @@ public class Main {
         });
     }
 
-    public void modifyStudent29(Long id, CountDownLatch latch, ExecutorService threadPool) {
+    private void modifyStudent29(Long id, CountDownLatch latch, ExecutorService threadPool) {
         threadPool.submit(() -> {
             transactionTemplate.executeWithoutResult(status -> {
                 modifyStudent29Transactional(id, latch);
@@ -109,6 +111,7 @@ public class Main {
 
     /**
      * The whole function should be in a single transaction block for pessimistic locking to work.
+     * Keep it in a public function, else it won't work.
      */
     @SneakyThrows
     public void modifyStudent29Transactional(Long id, CountDownLatch latch) {
@@ -118,8 +121,7 @@ public class Main {
             //No other transaction can modify the object with id 100l till this transaction is completed.
             //Others will wait till timeout
             log.info("[testPessimisticLocking] Student: {}, Thread: {}", student, Thread.currentThread().getName());
-            student.setStudentName(student.getStudentName() + "_" + Thread.currentThread().getName());
-            student.setUpdatedCount(student.getUpdatedCount() + 1);
+            student.setAmount(student.getAmount() + 10);
             //Delay so that version is updated before next thread saves. pessimistic lock timeout is set at 10 seconds.
             TimeUnit.SECONDS.sleep(15);
             student29Repository.save(student);
