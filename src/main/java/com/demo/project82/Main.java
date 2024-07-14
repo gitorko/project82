@@ -6,11 +6,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import com.demo.project82._29_pessimistic_locking.Student29;
-import com.demo.project82._29_pessimistic_locking.service.Student29Service;
+import com.demo.project82._29_pessimistic_locking.repo.Student29Repository;
 import com.demo.project82._30_optimistic_locking.Student30;
 import com.demo.project82._30_optimistic_locking.repo.Student30Repository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PessimisticLockException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -33,14 +31,10 @@ import org.springframework.transaction.support.TransactionTemplate;
 @Slf4j
 public class Main {
 
-    final Student29Service student29Service;
-
+    final Student29Repository student29Repository;
     final Student30Repository student30Repository;
 
     final TransactionTemplate transactionTemplate;
-
-    @PersistenceContext
-    EntityManager entityManager;
 
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
@@ -72,6 +66,7 @@ public class Main {
 
         student = student30Repository.findById(100l).orElseThrow();
         log.info("[testOptimisticLocking] Student After: {}", student);
+        assert student.getUpdatedCount() == 1;
     }
 
     /**
@@ -79,7 +74,7 @@ public class Main {
      */
     public void testPessimisticLocking() throws InterruptedException {
         ExecutorService threadPool = Executors.newCachedThreadPool();
-        Student29 student = student29Service.findById(100l);
+        Student29 student = student29Repository.findById(100l).orElseThrow();
         log.info("[testPessimisticLocking] Student Before: {}", student);
 
         CountDownLatch latch = new CountDownLatch(2);
@@ -89,8 +84,9 @@ public class Main {
         threadPool.shutdown();
         threadPool.awaitTermination(5, TimeUnit.SECONDS);
 
-        student = student29Service.findById(100l);
+        student = student29Repository.findById(100l).orElseThrow();
         log.info("[testPessimisticLocking] Student After: {}", student);
+        assert student.getUpdatedCount() == 1;
     }
 
     private void modifyStudent30(Long id, CountDownLatch latch, ExecutorService threadPool) {
@@ -124,7 +120,7 @@ public class Main {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void modifyStudent29Transactional(Long id, CountDownLatch latch) {
         try {
-            Student29 student = student29Service.findAndLockStudent(id);
+            Student29 student = student29Repository.findByIdLocked(id);
             //Student29 student = student29Repository.lockById(id, LockModeType.PESSIMISTIC_WRITE);
             //No other transaction can modify the object with id 100l till this transaction is completed.
             //Others will wait till timeout
@@ -133,7 +129,7 @@ public class Main {
             student.setUpdatedCount(student.getUpdatedCount() + 1);
             //Delay so that version is updated before next thread saves. pessimistic lock timeout is set at 10 seconds.
             TimeUnit.SECONDS.sleep(15);
-            student29Service.saveStudent(student);
+            student29Repository.save(student);
         } catch (PessimisticLockException ex) {
             log.info("[testPessimisticLocking] PessimisticLockException: {}", ex.getMessage());
         } finally {
