@@ -114,6 +114,8 @@ import com.demo.project82._30_optimistic_locking.repo.Student30Repository;
 import com.demo.project82._31_java_records.Student31Record;
 import com.demo.project82._31_java_records.repo.Student31Converter;
 import com.demo.project82._31_java_records.service.Student31Service;
+import com.demo.project82._32_transaction.Student32;
+import com.demo.project82._32_transaction.repo.Student32Repository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.Test;
@@ -237,6 +239,9 @@ public class StudentTest extends BaseTest {
 
     @Autowired
     Student30Repository student30Repository;
+
+    @Autowired
+    Student32Repository student32Repository;
 
     @Autowired
     Teacher26Repository teacher26Repository;
@@ -888,6 +893,18 @@ public class StudentTest extends BaseTest {
         Student31Record student = new Student31Record(null, "jack");
         Student31Record savedStudent = student31Service.save(student);
         assertNotNull(savedStudent.id());
+    }
+
+    @Test
+    public void test_32_transaction() {
+        /**
+         * Tests do transaction rollback after the test is completed.
+         */
+        Student32 student = Student32.builder()
+                .studentName("jack")
+                .build();
+        Student32 savedStudent = student32Repository.save(student);
+        assertNotNull(savedStudent.getId());
     }
 
 }

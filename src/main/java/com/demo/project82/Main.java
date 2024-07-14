@@ -9,6 +9,9 @@ import com.demo.project82._29_pessimistic_locking.Student29;
 import com.demo.project82._29_pessimistic_locking.repo.Student29Repository;
 import com.demo.project82._30_optimistic_locking.Student30;
 import com.demo.project82._30_optimistic_locking.repo.Student30Repository;
+import com.demo.project82._32_transaction.Student32;
+import com.demo.project82._32_transaction.repo.Student32Repository;
+import com.demo.project82._32_transaction.service.Student32Service;
 import jakarta.persistence.PessimisticLockException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -19,20 +22,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
 @SpringBootApplication
 @EnableJpaAuditing
 @RequiredArgsConstructor
-@EnableTransactionManagement
 @Slf4j
 public class Main {
 
     final Student29Repository student29Repository;
     final Student30Repository student30Repository;
+    final Student32Repository student32Repository;
+    final Student32Service student32Service;
 
     final TransactionTemplate transactionTemplate;
 
@@ -46,43 +47,69 @@ public class Main {
             log.info("DB Created!");
             testOptimisticLocking();
             testPessimisticLocking();
+            testTransaction();
         };
+    }
+
+    @SneakyThrows
+    public void testTransaction() {
+        Student32 student = student32Repository.findById(200l).orElseThrow();
+        log.info("Student Before: {}", student);
+        ExecutorService threadPool = Executors.newCachedThreadPool();
+        CountDownLatch latch = new CountDownLatch(1);
+        student32Service.modifyStuden32(200l, latch);
+        latch.await(1, TimeUnit.SECONDS);
+        threadPool.shutdown();
+        threadPool.awaitTermination(5, TimeUnit.SECONDS);
+        student = student32Repository.findById(200l).orElseThrow();
+        log.info("Student After: {}", student);
+        if (!student.getStudentName().equals("raj")) {
+            throw new RuntimeException("VALIDATION_ERROR");
+        }
     }
 
     public void testOptimisticLocking() throws InterruptedException {
         ExecutorService threadPool = Executors.newCachedThreadPool();
-        Student30 student = student30Repository.findById(100l).orElseThrow();
+        Student30 student = student30Repository.findById(200l).orElseThrow();
         log.info("[testOptimisticLocking] Student Before: {}", student);
 
         CountDownLatch latch = new CountDownLatch(2);
-        modifyStudent30(100l, latch, threadPool);
-        modifyStudent30(100l, latch, threadPool);
+        modifyStudent30(200l, latch, threadPool);
+        modifyStudent30(200l, latch, threadPool);
         latch.await(10, TimeUnit.SECONDS);
         threadPool.shutdown();
         threadPool.awaitTermination(5, TimeUnit.SECONDS);
 
-        student = student30Repository.findById(100l).orElseThrow();
+        student = student30Repository.findById(200l).orElseThrow();
         log.info("[testOptimisticLocking] Student After: {}", student);
-        assert student.getUpdatedCount() == 1;
-        assert student.getAmount() == 110;
+        if (student.getUpdatedCount() != 1) {
+            throw new RuntimeException("VALIDATION_ERROR");
+        }
+        if (student.getAmount() != 110) {
+            throw new RuntimeException("VALIDATION_ERROR");
+        }
     }
 
     public void testPessimisticLocking() throws InterruptedException {
         ExecutorService threadPool = Executors.newCachedThreadPool();
-        Student29 student = student29Repository.findById(100l).orElseThrow();
+        Student29 student = student29Repository.findById(200l).orElseThrow();
         log.info("[testPessimisticLocking] Student Before: {}", student);
 
         CountDownLatch latch = new CountDownLatch(2);
-        modifyStudent29(100l, latch, threadPool);
-        modifyStudent29(100l, latch, threadPool);
+        modifyStudent29(200l, latch, threadPool);
+        modifyStudent29(200l, latch, threadPool);
         latch.await(20, TimeUnit.SECONDS);
         threadPool.shutdown();
         threadPool.awaitTermination(5, TimeUnit.SECONDS);
 
-        student = student29Repository.findById(100l).orElseThrow();
+        student = student29Repository.findById(200l).orElseThrow();
         log.info("[testPessimisticLocking] Student After: {}", student);
-        assert student.getUpdatedCount() == 1;
-        assert student.getAmount() == 110;
+        if (student.getUpdatedCount() != 1) {
+            throw new RuntimeException("VALIDATION_ERROR");
+        }
+        if (student.getAmount() != 110) {
+            throw new RuntimeException("VALIDATION_ERROR");
+        }
     }
 
     private void modifyStudent30(Long id, CountDownLatch latch, ExecutorService threadPool) {
@@ -118,7 +145,7 @@ public class Main {
         try {
             Student29 student = student29Repository.findByIdLocked(id);
             //Student29 student = student29Repository.lockById(id, LockModeType.PESSIMISTIC_WRITE);
-            //No other transaction can modify the object with id 100l till this transaction is completed.
+            //No other transaction can modify the object with id 200l till this transaction is completed.
             //Others will wait till timeout
             log.info("[testPessimisticLocking] Student: {}, Thread: {}", student, Thread.currentThread().getName());
             student.setAmount(student.getAmount() + 10);
