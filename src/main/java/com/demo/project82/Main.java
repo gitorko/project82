@@ -49,9 +49,6 @@ public class Main {
         };
     }
 
-    /**
-     * Transaction behave differently in unit tests hence testing in main method
-     */
     public void testOptimisticLocking() throws InterruptedException {
         ExecutorService threadPool = Executors.newCachedThreadPool();
         Student30 student = student30Repository.findById(100l).orElseThrow();
@@ -69,9 +66,6 @@ public class Main {
         assert student.getUpdatedCount() == 1;
     }
 
-    /**
-     * Transaction behave differently in unit tests hence testing in main method
-     */
     public void testPessimisticLocking() throws InterruptedException {
         ExecutorService threadPool = Executors.newCachedThreadPool();
         Student29 student = student29Repository.findById(100l).orElseThrow();
@@ -117,7 +111,6 @@ public class Main {
      * The whole function should be in a single transaction block for pessimistic locking to work.
      */
     @SneakyThrows
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void modifyStudent29Transactional(Long id, CountDownLatch latch) {
         try {
             Student29 student = student29Repository.findByIdLocked(id);
