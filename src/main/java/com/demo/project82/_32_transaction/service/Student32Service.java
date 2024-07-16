@@ -15,9 +15,6 @@ public class Student32Service {
 
     final Student32Repository student32Repository;
 
-    /**
-     * Keep it in a public function, else it won't work.
-     */
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public void modifyStuden32(Long id, CountDownLatch latch) {
         Student32 readOnlyStudent = student32Repository.findById(id).orElseThrow();

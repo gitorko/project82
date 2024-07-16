@@ -5,6 +5,9 @@ import java.util.concurrent.TimeUnit;
 
 import com.demo.project82._29_pessimistic_locking.Student29;
 import com.demo.project82._29_pessimistic_locking.repo.Student29Repository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.FlushModeType;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +19,14 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Slf4j
 public class Student29Service {
+
     final Student29Repository student29Repository;
+
+    /**
+     * To ensure that the transaction commits and the update is flushed immediately after the method completes, you can explicitly manage the flush and commit behavior
+     */
+    @PersistenceContext
+    private EntityManager entityManager;
 
     /**
      * The whole function should be in a single transaction block for pessimistic locking to work.
@@ -25,6 +35,9 @@ public class Student29Service {
     @Transactional
     public void modifyStudent29(Long id, CountDownLatch latch) {
         try {
+            //explicitly setting flush mode to commit, spring.datasource.hikari.auto-commit=true
+            entityManager.setFlushMode(FlushModeType.COMMIT);
+
             Student29 student = student29Repository.findByIdLocked(id);
             //Student29 student = student29Repository.lockById(id, LockModeType.PESSIMISTIC_WRITE);
             //No other transaction can modify the object with id 200l till this transaction is completed.
@@ -38,6 +51,8 @@ public class Student29Service {
         } catch (PessimisticLockingFailureException ex) {
             log.error("[testPessimisticLocking] PessimisticLockingFailureException: {}", ex.getMessage());
         } finally {
+            //without the explict flush the transaction might not be flushed immediately after the method is complete.
+            entityManager.flush();
             latch.countDown();
         }
     }
