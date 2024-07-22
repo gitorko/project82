@@ -29,6 +29,7 @@ spring:
         format_sql: false
         connection:
           isolation: 2
+    open-in-view: false
   sql:
     init:
       mode: always
