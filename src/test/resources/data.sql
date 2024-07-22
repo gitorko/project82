@@ -127,3 +127,15 @@ insert into course_19 (id, student_id, course_name)  values (205, 101, 'physics'
 -- insert data to student_30
 
 insert into student_30 (id, student_name, amount, updated_count) values (100, 'raj', 100, 0);
+
+-- insert data to student_34
+
+insert into student_34 (id, student_name) values (100, 'raj');
+insert into course_34 (id, student_id, course_name) values (200, 100, 'mathematics');
+insert into course_34 (id, student_id, course_name) values (201, 100, 'history');
+insert into course_34 (id, student_id, course_name) values (202, 100, 'physics');
+
+insert into student_34 (id, student_name) values (101, 'jack');
+insert into course_34 (id, student_id, course_name) values (203, 101, 'chemistry');
+insert into course_34 (id, student_id, course_name) values (204, 101, 'history');
+insert into course_34 (id, student_id, course_name) values (205, 101, 'physics');

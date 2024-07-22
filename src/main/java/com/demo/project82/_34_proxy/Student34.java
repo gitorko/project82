@@ -1,31 +1,27 @@
-package com.demo.project82._32_transaction;
+package com.demo.project82._34_proxy;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
-@Table(name = "student_32")
+@Table(name = "student_34")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@DynamicUpdate
-public class Student32 {
+public class Student34 {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private Long id;
 
-    @NotBlank
+    @Column(name = "student_name")
     private String studentName;
-
 }

@@ -16,7 +16,7 @@ spring:
       minimum-idle: 3
       max-lifetime: 1800000
       connection-test-query: SELECT 1
-      auto-commit: true
+      auto-commit: false
   jpa:
     hibernate.ddl-auto: create
     properties.hibernate.temp.use_jdbc_metadata_defaults: false

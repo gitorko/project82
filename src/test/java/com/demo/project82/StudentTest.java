@@ -109,13 +109,20 @@ import com.demo.project82._28_projections.Student28Pojo;
 import com.demo.project82._28_projections.Student28View;
 import com.demo.project82._28_projections.repo.Student28Repository;
 import com.demo.project82._29_pessimistic_locking.repo.Student29Repository;
+import com.demo.project82._29_pessimistic_locking.service.Student29Service;
 import com.demo.project82._30_optimistic_locking.Student30;
 import com.demo.project82._30_optimistic_locking.repo.Student30Repository;
+import com.demo.project82._30_optimistic_locking.service.Student30Service;
 import com.demo.project82._31_java_records.Student31Record;
 import com.demo.project82._31_java_records.repo.Student31Converter;
 import com.demo.project82._31_java_records.service.Student31Service;
 import com.demo.project82._32_transaction.Student32;
 import com.demo.project82._32_transaction.repo.Student32Repository;
+import com.demo.project82._32_transaction.service.Student32Service;
+import com.demo.project82._34_proxy.Course34;
+import com.demo.project82._34_proxy.Student34;
+import com.demo.project82._34_proxy.repo.Course34Repository;
+import com.demo.project82._34_proxy.repo.Student34Repository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.Test;
@@ -130,7 +137,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
-@Import({Student31Service.class, Student31Converter.class})
+@Import({Student29Service.class, Student30Service.class, Student31Service.class, Student32Service.class, Student31Converter.class})
 public class StudentTest extends BaseTest {
 
     final ExecutorService threadPool = Executors.newFixedThreadPool(2);
@@ -244,6 +251,9 @@ public class StudentTest extends BaseTest {
     Student32Repository student32Repository;
 
     @Autowired
+    Student34Repository student34Repository;
+
+    @Autowired
     Teacher26Repository teacher26Repository;
 
     @Autowired
@@ -254,6 +264,9 @@ public class StudentTest extends BaseTest {
 
     @Autowired
     Course19Repository course19Repository;
+
+    @Autowired
+    Course34Repository course34Repository;
 
     @Autowired
     Teacher13Repository teacher13Repository;
@@ -905,6 +918,27 @@ public class StudentTest extends BaseTest {
                 .build();
         Student32 savedStudent = student32Repository.save(student);
         assertNotNull(savedStudent.getId());
+    }
+
+    @Test
+    public void test_33_dynamic_update() {
+        //Check the SQL update statement they will contain on the columns that changed as we used @DynamicUpdate
+        //Since tests don't persist the data you will not see this in the test logs.
+        Student32 student = Student32.builder()
+                .studentName("jack")
+                .build();
+        Student32 savedStudent = student32Repository.save(student);
+        assertNotNull(savedStudent.getId());
+    }
+
+    @Test
+    public void test_34_proxy() {
+        //by using getReferenceById we get a proxy object instead of the real object.
+        //with just the proxy object we are able to get the courses.
+        //drawback is that there can be constraint violation if the object doesn't really exist as we never checked the db.
+        Student34 student = student34Repository.getReferenceById(100l);
+        List<Course34> courses = course34Repository.findAllByStudent(student);
+        assertEquals(3, courses.size());
     }
 
 }
