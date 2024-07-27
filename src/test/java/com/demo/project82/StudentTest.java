@@ -119,6 +119,9 @@ import com.demo.project82._31_java_records.service.Student31Service;
 import com.demo.project82._32_transaction.Student32;
 import com.demo.project82._32_transaction.repo.Student32Repository;
 import com.demo.project82._32_transaction.service.Student32Service;
+import com.demo.project82._33_query_by_example.Student33;
+import com.demo.project82._33_query_by_example.repo.Student33Repository;
+import com.demo.project82._33_query_by_example.service.Student33Service;
 import com.demo.project82._34_proxy.Course34;
 import com.demo.project82._34_proxy.Student34;
 import com.demo.project82._34_proxy.repo.Course34Repository;
@@ -130,6 +133,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -137,7 +143,8 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
-@Import({Student29Service.class, Student30Service.class, Student31Service.class, Student32Service.class, Student31Converter.class})
+@Import({Student29Service.class, Student30Service.class, Student31Service.class, Student32Service.class,
+        Student33Service.class, Student31Converter.class})
 public class StudentTest extends BaseTest {
 
     final ExecutorService threadPool = Executors.newFixedThreadPool(2);
@@ -251,6 +258,9 @@ public class StudentTest extends BaseTest {
     Student32Repository student32Repository;
 
     @Autowired
+    Student33Repository student33Repository;
+
+    @Autowired
     Student34Repository student34Repository;
 
     @Autowired
@@ -282,6 +292,9 @@ public class StudentTest extends BaseTest {
 
     @Autowired
     Student31Service student31Service;
+
+    @Autowired
+    Student33Service student33Service;
 
     @PersistenceContext
     EntityManager entityManager;
@@ -921,7 +934,7 @@ public class StudentTest extends BaseTest {
     }
 
     @Test
-    public void test_33_dynamic_update() {
+    public void test_32_dynamic_update() {
         //Check the SQL update statement they will contain on the columns that changed as we used @DynamicUpdate
         //Since tests don't persist the data you will not see this in the test logs.
         Student32 student = Student32.builder()
@@ -929,6 +942,36 @@ public class StudentTest extends BaseTest {
                 .build();
         Student32 savedStudent = student32Repository.save(student);
         assertNotNull(savedStudent.getId());
+    }
+
+    @Test
+    public void test_33_queryByExample() {
+        Student33 exampleStudent = Student33.builder()
+                .studentName("jack")
+                .build();
+        Student33 student = student33Service.findByOneExample1(exampleStudent);
+        assertNotNull(student.getId());
+
+        student = student33Service.findByOneExample2(exampleStudent);
+        assertNotNull(student.getId());
+
+        List<Student33> students = student33Service.findAllExample1(exampleStudent);
+        assertEquals(1, students.size());
+
+        students = student33Service.findAllExample2(exampleStudent);
+        assertEquals(1, students.size());
+
+        Page<Student33> page = student33Service.findAllByPage(PageRequest.of(0, 10, Sort.by("studentName")));
+        assertEquals(5, page.getTotalElements());
+
+        page = student33Service.findAllByPageSort(PageRequest.of(0, 10));
+        assertEquals(5, page.getTotalElements());
+
+        students = student33Service.findByNameAndAgeIndex("raj", 34);
+        assertEquals(1, students.size());
+
+        students = student33Service.findByNameAndAgeParam("raj", 34);
+        assertEquals(1, students.size());
     }
 
     @Test

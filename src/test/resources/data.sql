@@ -128,6 +128,14 @@ insert into course_19 (id, student_id, course_name)  values (205, 101, 'physics'
 
 insert into student_30 (id, student_name, amount, updated_count) values (100, 'raj', 100, 0);
 
+-- insert data to student_33
+
+insert into student_33 (id, student_name, age) values (100, 'raj', 34);
+insert into student_33 (id, student_name, age) values (101, 'jack', 35);
+insert into student_33 (id, student_name, age) values (102, 'adam', 40);
+insert into student_33 (id, student_name, age) values (103, 'rajesh', 32);
+insert into student_33 (id, student_name, age) values (104, 'jacky', 28);
+
 -- insert data to student_34
 
 insert into student_34 (id, student_name) values (100, 'raj');
