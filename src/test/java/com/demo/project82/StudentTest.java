@@ -833,7 +833,7 @@ public class StudentTest extends BaseTest {
         Student25 savedStudent25 = student25Repository.save(student);
         assertNotNull(savedStudent25);
 
-        Student25 findStudent25  = student25Repository.findById(savedStudent25.getId()).orElseThrow();
+        Student25 findStudent25 = student25Repository.findById(savedStudent25.getId()).orElseThrow();
         assertEquals(12345, findStudent25.getAttributes().get("zipcode"));
     }
 
@@ -999,8 +999,11 @@ public class StudentTest extends BaseTest {
         Student35 savedStudent35 = student35Repository.save(student);
         assertNotNull(savedStudent35);
 
-        Student35 findStudent35  = student35Repository.findById(savedStudent35.getId()).orElseThrow();
+        Student35 findStudent35 = student35Repository.findById(savedStudent35.getId()).orElseThrow();
         assertEquals(payload, findStudent35.getPayload());
+
+        List<Student35> studentList = student35Repository.findByCity("bangalore");
+        assertEquals(1, studentList.size());
     }
 
 }
