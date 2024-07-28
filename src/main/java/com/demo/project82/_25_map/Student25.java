@@ -1,6 +1,5 @@
-package com.demo.project82._25_json_map;
+package com.demo.project82._25_map;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import jakarta.persistence.Column;
@@ -15,7 +14,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.SneakyThrows;
 
 @Entity
 @Table(name = "student_25")
@@ -33,21 +31,8 @@ public class Student25 {
     @NotBlank
     private String studentName;
 
-    @Column(name = "payload", columnDefinition = "jsonb")
-    private String payload;
-
     @Convert(converter = EntityConverter.class)
     @Column(name = "attributes", columnDefinition = "jsonb")
     private Map<String, Object> attributes;
-
-    @SneakyThrows
-    public String serializeCustomerAttributes() {
-        return EntityConverter.objectMapper.writeValueAsString(attributes);
-    }
-
-    @SneakyThrows
-    public HashMap<String, Object> deserializeCustomerAttributes() {
-        return EntityConverter.objectMapper.readValue(payload, HashMap.class);
-    }
 
 }

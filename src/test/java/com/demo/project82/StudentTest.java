@@ -94,8 +94,8 @@ import com.demo.project82._23_nartual_id.repo.Student23Repository;
 import com.demo.project82._24_composite_key.Student24;
 import com.demo.project82._24_composite_key.Student24Identity;
 import com.demo.project82._24_composite_key.repo.Student24Repository;
-import com.demo.project82._25_json_map.Student25;
-import com.demo.project82._25_json_map.repo.Student25Repository;
+import com.demo.project82._25_map.Student25;
+import com.demo.project82._25_map.repo.Student25Repository;
 import com.demo.project82._26_embeddable.Address;
 import com.demo.project82._26_embeddable.Student26;
 import com.demo.project82._26_embeddable.Teacher26;
@@ -126,6 +126,8 @@ import com.demo.project82._34_proxy.Course34;
 import com.demo.project82._34_proxy.Student34;
 import com.demo.project82._34_proxy.repo.Course34Repository;
 import com.demo.project82._34_proxy.repo.Student34Repository;
+import com.demo.project82._35_json.Student35;
+import com.demo.project82._35_json.repo.Student35Repository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.Test;
@@ -262,6 +264,9 @@ public class StudentTest extends BaseTest {
 
     @Autowired
     Student34Repository student34Repository;
+
+    @Autowired
+    Student35Repository student35Repository;
 
     @Autowired
     Teacher26Repository teacher26Repository;
@@ -816,20 +821,20 @@ public class StudentTest extends BaseTest {
     }
 
     @Test
-    public void test_25_json_map() {
+    public void test_25_map() {
         Map<String, Object> attributes = new HashMap<>();
         attributes.put("address", "123 Main Street");
         attributes.put("zipcode", 12345);
-        String payload = "{\"city\": \"bangalore\"}";
 
         Student25 student = Student25.builder()
+                .studentName("jack")
                 .attributes(attributes)
-                .payload(payload)
                 .build();
         Student25 savedStudent25 = student25Repository.save(student);
         assertNotNull(savedStudent25);
-        assertNotNull(student.serializeCustomerAttributes());
-        assertNotNull(student.deserializeCustomerAttributes());
+
+        Student25 findStudent25  = student25Repository.findById(savedStudent25.getId()).orElseThrow();
+        assertEquals(12345, findStudent25.getAttributes().get("zipcode"));
     }
 
     @Test
@@ -982,6 +987,20 @@ public class StudentTest extends BaseTest {
         Student34 student = student34Repository.getReferenceById(100l);
         List<Course34> courses = course34Repository.findAllByStudent(student);
         assertEquals(3, courses.size());
+    }
+
+    @Test
+    public void test_35_json() {
+        String payload = "{\"city\": \"bangalore\"}";
+        Student35 student = Student35.builder()
+                .studentName("jack")
+                .payload(payload)
+                .build();
+        Student35 savedStudent35 = student35Repository.save(student);
+        assertNotNull(savedStudent35);
+
+        Student35 findStudent35  = student35Repository.findById(savedStudent35.getId()).orElseThrow();
+        assertEquals(payload, findStudent35.getPayload());
     }
 
 }
