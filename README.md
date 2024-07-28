@@ -38,3 +38,12 @@ To look at isolation level
 SHOW default_transaction_isolation;
 ALTER DATABASE "test-db" SET default_transaction_isolation = 'read committed'
 ```
+
+### Dev
+
+To run the backend in dev mode.
+
+```bash
+./gradlew clean build
+./gradlew bootRun
+```
