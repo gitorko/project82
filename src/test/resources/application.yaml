@@ -6,10 +6,13 @@ spring:
     show-sql: true
     properties:
       hibernate:
+        jdbc:
+          batch_size: 10
         show_sql: true
         format_sql: true
         use_sql_comments: false
         generate_statistics: false
+        order_updates: true
   sql:
     init:
       mode: always
