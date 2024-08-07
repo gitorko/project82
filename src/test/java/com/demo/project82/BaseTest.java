@@ -9,8 +9,8 @@ public abstract class BaseTest {
     @Container
     static PostgreSQLContainer postgresqlContainer = (PostgreSQLContainer) new PostgreSQLContainer("postgres:14")
             .withDatabaseName("test-db")
-            .withUsername("sa")
-            .withPassword("sa")
+            .withUsername("user")
+            .withPassword("password")
             .withReuse(true);
 
     @DynamicPropertySource
